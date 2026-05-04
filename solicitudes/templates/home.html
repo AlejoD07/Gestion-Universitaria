@@ -1,0 +1,57 @@
+{% load static %}
+
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Solicitudes</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'solicitudes/style_home.css' %}">
+</head>
+<body>
+    <div class="header">
+        <h2 style="margin: 0;">Universidad</h2>
+        <div>
+            <a href="#">Inicio</a>
+            <a href="#">Información</a>
+            <a href="#">Ingresar</a>
+        </div>
+    </div>
+    <div class="hero">
+        <h1>Sistema de Solicitudes, Quejas y Reclamos</h1>
+        <p>Gestiona de forma rápida y sencilla tus solicitudes dentro de la universidad.</p>
+        <button>Ingresar al sistema</button>
+        <div class="cards">
+            <div class="card">
+                <h3>Solicitudes</h3>
+                <p>Realiza trámites como certificados, cambios de horario o solicitudes académicas.</p>
+                <div class="div-content">
+                    <div class="div-redirect">
+                        <a href="{% url 'solicitudes:ejemplo_for' id=7 %}" style="background: lightblue; border: 1px solid; border-radius: 8px; padding: 5px 10px; cursor: pointer;">Ver Solicitudes</a >
+                        <a href="{% url 'solicitudes:form_quejas' %}" style="background: lightblue; border: 1px solid; border-radius: 8px; padding: 5px 10px; cursor: pointer;">Crear Solicitud</a>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <h3>Quejas</h3>
+                <p>Puedes reportar inconformidades relacionadas con servicios, clases, profesores o procesos que se lleven a cabo dentro de la universidad.</p>
+                <div class="div-content">
+                    <div class="div-redirect">
+                        <a href="{% url 'solicitudes:ejemplo_for' id=7 %}" style="background: lightblue; border: 1px solid; border-radius: 8px; padding: 5px 10px; cursor: pointer;">Ver Quejas</a >
+                        <a href="{% url 'solicitudes:form_quejas' %}" style="background: lightblue; border: 1px solid; border-radius: 8px; padding: 5px 10px; cursor: pointer;">Crear Queja</a>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <h3>Reclamos</h3>
+                <p>Presenta reclamaciones formales sobre situaciones que afecten o vulneren tus derechos.</p>
+                <div class="div-content">
+                    <div class="div-redirect">
+                        <a href="{% url 'solicitudes:ejemplo_for' id=7 %}" style="background: lightblue; border: 1px solid; border-radius: 8px; padding: 5px 10px; cursor: pointer;">Ver Reclamos</a >
+                        <a href="{% url 'solicitudes:form_quejas' %}" style="background: lightblue; border: 1px solid; border-radius: 8px; padding: 5px 10px; cursor: pointer;">Crear Reclamo</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
