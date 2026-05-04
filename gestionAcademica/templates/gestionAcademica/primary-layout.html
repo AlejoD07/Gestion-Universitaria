@@ -1,0 +1,37 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion Academica - {% block titulo %}{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'gestionAcademica/CSS/styleAcademica.css' %}">
+</head>
+<body>
+    <nav class="barra-navegacion">
+        <span class="marca">Gestion Academica</span>
+        <a href="{% url 'academica_inicio' %}">Inicio</a>
+        <a href="{% url 'lista_usuarios' %}">Usuarios</a>
+        <a href="{% url 'lista_profesores' %}">Profesores</a>
+        <a href="{% url 'lista_estudiantes' %}">Estudiantes</a>
+        <a href="{% url 'lista_programas' %}">Programas</a>
+        <a href="{% url 'lista_materias' %}">Materias</a>
+        <a href="{% url 'lista_periodos' %}">Periodos</a>
+        <a href="{% url 'lista_inscripciones' %}">Inscripciones</a>
+        <a href="{% url 'lista_notas' %}">Notas</a>
+        <a href="{% url 'lista_asistencias' %}">Asistencias</a>
+    </nav>
+
+    <div class="contenedor">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="mensaje">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        {% block contenido %}{% endblock %}
+    </div>
+
+    <script src="{% static 'gestionAcademica/JS/academica.js' %}"></script>
+</body>
+</html>

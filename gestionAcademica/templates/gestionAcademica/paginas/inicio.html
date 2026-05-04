@@ -1,0 +1,51 @@
+{% extends 'gestionAcademica/primary-layout.html' %}
+{% block titulo %}Inicio{% endblock %}
+{% block contenido %}
+
+<h1>Panel de Gestion Academica</h1>
+
+<div class="resumen">
+    <div class="tarjeta">
+        <div class="numero">{{ total_usuarios }}</div>
+        <div class="etiqueta">Usuarios registrados</div>
+    </div>
+    <div class="tarjeta">
+        <div class="numero">{{ total_profesores }}</div>
+        <div class="etiqueta">Profesores registrados</div>
+    </div>
+    <div class="tarjeta">
+        <div class="numero">{{ total_estudiantes }}</div>
+        <div class="etiqueta">Estudiantes activos</div>
+    </div>
+    <div class="tarjeta">
+        <div class="numero">{{ total_materias }}</div>
+        <div class="etiqueta">Materias registradas</div>
+    </div>
+    <div class="tarjeta">
+        <div class="numero">{{ total_inscripciones }}</div>
+        <div class="etiqueta">Inscripciones registradas</div>
+    </div>
+    <div class="tarjeta">
+        <div class="numero">{{ total_notas }}</div>
+        <div class="etiqueta">Notas registradas</div>
+    </div>
+    <div class="tarjeta">
+        <div class="numero">{{ total_asistencias }}</div>
+        <div class="etiqueta">Asistencias registradas</div>
+    </div>
+</div>
+
+<h2>Accesos rapidos</h2>
+<a href="{% url 'lista_usuarios' %}" class="btn btn-primario">Ver Usuarios</a>
+<a href="{% url 'lista_profesores' %}" class="btn btn-primario">Ver Profesores</a>
+<a href="{% url 'lista_estudiantes' %}" class="btn btn-primario">Ver Estudiantes</a>
+<a href="{% url 'lista_materias' %}" class="btn btn-primario">Ver Materias</a>
+<a href="{% url 'lista_inscripciones' %}" class="btn btn-primario">Ver Inscripciones</a>
+
+<h2 class="separador">Catalogos</h2>
+<a href="{% url 'lista_roles' %}" class="btn btn-secundario">Roles</a>
+<a href="{% url 'lista_tipos_documento' %}" class="btn btn-secundario">Tipos de Documento</a>
+<a href="{% url 'lista_programas' %}" class="btn btn-secundario">Programas</a>
+<a href="{% url 'lista_periodos' %}" class="btn btn-secundario">Periodos</a>
+
+{% endblock %}

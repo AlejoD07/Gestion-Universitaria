@@ -1,0 +1,39 @@
+{% extends 'gestionAcademica/primary-layout.html' %}
+{% block titulo %}{{ titulo }}{% endblock %}
+{% block contenido %}
+
+<h1>{{ titulo }}</h1>
+
+<div class="formulario">
+    <form method="POST">
+        {% csrf_token %}
+
+        {% for field in campos %}
+            <div class="campo">
+                <label>{{ field.label }}</label>
+
+                {% if field.type == 'select' %}
+                    <select name="{{ field.name }}" {% if field.required %}required{% endif %}>
+                        <option value="">-- Selecciona --</option>
+                        {% for option in field.options %}
+                            <option value="{{ option.valor }}" {% if option.seleccionado %}selected{% endif %}>{{ option.texto }}</option>
+                        {% endfor %}
+                    </select>
+                {% elif field.type == 'textarea' %}
+                    <textarea name="{{ field.name }}" rows="4" {% if field.required %}required{% endif %}>{{ field.value }}</textarea>
+                {% elif field.type == 'checkbox' %}
+                    <input type="checkbox" name="{{ field.name }}" {% if field.checked %}checked{% endif %}>
+                {% elif field.type == 'date' %}
+                    <input type="date" name="{{ field.name }}" value="{{ field.value|date:'Y-m-d' }}" {% if field.required %}required{% endif %}>
+                {% else %}
+                    <input type="{{ field.type }}" name="{{ field.name }}" value="{{ field.value }}" {% if field.step %}step="{{ field.step }}"{% endif %} {% if field.min %}min="{{ field.min }}"{% endif %} {% if field.max %}max="{{ field.max }}"{% endif %} {% if field.required %}required{% endif %}>
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        <button type="submit" class="btn btn-primario">Guardar</button>
+        <a href="{% url volver_url %}" class="btn btn-secundario">Cancelar</a>
+    </form>
+</div>
+
+{% endblock %}
