@@ -38,9 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     #registrar aplicaciones
-    'gestionUniversitaria',
     'RecursosHumanos',
-    'Inventario',
+    'inventario',
     'Contabilidad',
     'gestionAcademica',
 ]
@@ -110,7 +109,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Bogota' #'UTC'
 
 USE_I18N = True
 

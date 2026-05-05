@@ -1,0 +1,37 @@
+{% extends "home.html" %}
+
+{% block main %}
+    <div class="main-cards">
+        <div class="card">
+            <h3>Total Items</h3>
+            <p>{{ total_items }}</p>
+        </div>
+
+        <div class="card">
+            <h3>Prestados</h3>
+            <p>{{ prestados }}</p>
+        </div>
+
+        <div class="card">
+            <h3>Mantenimiento</h3>
+            <p>{{ mantenimiento }}</p>
+        </div>
+
+        <div class="card">
+            <h3>Dañados</h3>
+            <p>{{ danados }}</p>
+        </div>
+    </div>
+
+    <div class="actions">
+        <a href="{% url 'inventario:items' %}" class="btn">
+            Items
+        </a>
+        <a href="{% url 'inventario:prestamos' %}" class="btn">
+            Prestamos
+        </a>
+        <a href="{% url 'inventario:categorias' %}" class="btn">
+            Categorias
+        </a>
+    </div>
+{% endblock %}

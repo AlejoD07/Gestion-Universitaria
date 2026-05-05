@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de inventario</title>
+</head>
+<body style="margin:0; font-family: Arial, Helvetica, sans-serif; background-color:#f4f6f9;">
+    <header style="background-color:#3b82f6; padding:15px 40px; color:white; box-shadow:0px 2px 5px rgba(0,0,0,0.2);">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <h1 style="margin:0; font-size:24px;">
+                Inventario Académico
+            </h1>
+            <nav>
+                <ul style="list-style:none; display:flex; margin:0; padding:0; gap:25px;">
+                    <li><a style="color:white; text-decoration:none; font-weight:bold;">Inicio</a></li>
+                    <li><a style="color:white; text-decoration:none;">Inventario</a></li>
+                    <li><a style="color:white; text-decoration:none;">Préstamos</a></li>
+                    <li><a style="color:white; text-decoration:none;">Reportes</a></li>
+                    <li><a style="color:white; text-decoration:none;">Usuario</a></li>
+                    <li><a style="color:white; text-decoration:none;">Configuración</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <main style="padding:40px;">
+        <h2 style="margin-bottom:30px; color:#333;">
+            Lista de Inventario
+        </h2>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px,1fr)); gap:20px;">
+            {% for item in items %}
+                <div style=
+                    "background:white;
+                    padding:20px;
+                    border-radius:10px;
+                    box-shadow:0px 2px 6px rgba(0,0,0,0.1);
+                    border-left:6px solid #3b82f6;"
+                >
+                    <h3 style="margin-top:0; color:#1f2937;">
+                        {{item.nombre_item}}
+                    </h3>
+                    <p style="margin:5px 0;">
+                        <strong>Categoría:</strong> {{item.categoria}}
+                    </p>
+                    {% if item.descripcion_item %}
+                        <p style="margin:5px 0;">
+                            <strong>Descripción:</strong> {{item.descripcion_item}}
+                        </p>
+                    {% endif %}
+                    <p style="margin:5px 0;">
+                        <strong>Ubicación:</strong> {{item.ubicacion_item}}
+                    </p>
+                    <p style="margin:5px 0;">
+                        <strong>Fecha registro:</strong> {{item.fecha_registro}}
+                    </p>
+                    <p style="margin:5px 0;">
+                        <strong>Valor:</strong> ${{item.valor_item}}
+                    </p>
+                    <p style="margin:5px 0;">
+                        <strong>Estado:</strong> {{item.estado_item}}
+                    </p>
+                </div>
+            {% endfor %}
+        </div>
+    </main>
+</body>
+</html>
