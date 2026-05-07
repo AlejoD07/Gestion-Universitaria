@@ -1,0 +1,56 @@
+{% extends "home.html" %}
+
+{% block main %}
+    <h2>Gestión de Categorías</h2>
+
+<div>
+    <a href="{% url 'inventario:crear_categoria' %}">
+        Crear nueva categoría
+    </a>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Fecha creación</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        {% for categoria in categorias %}
+        <tr>
+            <td>
+                {{ categoria.nombre_categoria }}
+            </td>
+            <td>
+                {{ categoria.descripcion_categoria }}
+            </td>
+            <td>
+                {{ categoria.fecha_creacion_categoria }}
+            </td>
+            <td>
+
+                <a href="{% url 'inventario:actualizar_categoria' categoria.id %}"">
+                    Actualizar
+                </a>
+
+                <a href="{% url 'inventario:eliminar_categoria' categoria.id %}">
+                    Eliminar
+                </a>
+
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td>
+                No hay categorías registradas
+            </td>
+        </tr>
+        {% endfor %}
+
+    </tbody>
+</table>
+{% endblock %}
