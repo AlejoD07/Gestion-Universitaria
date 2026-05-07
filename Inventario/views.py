@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from . import models
 from . import forms
+from django.db.models import ProtectedError
+from django.contrib import messages
 
 # Create your views here.
 def home(request):
@@ -81,7 +83,11 @@ def actualizar_categoria(request, id):
 def eliminar_categoria(request, id):
     categoria = models.Categoria.objects.get(id = id)
 
-    categoria.delete()
+    try:
+        categoria.delete()
+        messages.success(request, "Categoría eliminada correctamente")
+    except ProtectedError:
+        messages.error(request, "No puedes eliminar esta categoría porque tiene items asociados")
 
     return redirect('inventario:categorias')
 
@@ -173,7 +179,12 @@ def actualizar_item(request, id):
 def eliminar_item(request, id):
     item = models.Item.objects.get(id = id)
 
-    item.delete()
+    try:
+        item.delete()
+        messages.success(request, "Item eliminado correctamente")
+    except ProtectedError:
+        messages.error(request, "No puedes eliminar este item porque tiene prestamos asociados")
+    
 
     return redirect('inventario:items')
 
