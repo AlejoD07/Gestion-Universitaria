@@ -1,0 +1,67 @@
+{% extends "home.html" %}
+
+{% block main %}
+
+<div class="actions">
+    <a href="{% url 'inventario:crear_item' %}" class="btn">
+        + Crear nuevo Item
+    </a>
+</div>
+
+<div class="main-cards">
+    <div class="card">
+        <h3>Gestión de Items</h3>
+
+        <div class="table-container">
+            <div class="table-scroll">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Marca</th>
+                            <th>Descripción</th>
+                            <th>Ubicación</th>
+                            <th>Fecha Registro</th>
+                            <th>Fecha Compra</th>
+                            <th>Valor</th>
+                            <th>Estado</th>
+                            <th>Categoría</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        {% for item in items %}
+                        <tr>
+                            <td>{{ item.nombre_item }}</td>
+                            <td>{{ item.marca_item }}</td>
+                            <td>{{ item.descripcion_item }}</td>
+                            <td>{{ item.ubicacion_item }}</td>
+                            <td>{{ item.fecha_registro|date:"d/m/Y" }}</td>
+                            <td>{{ item.fecha_compra }}</td>
+                            <td>${{ item.valor_item }}</td>
+                            <td>{{ item.get_estado_item_display }}</td>
+                            <td>{{ item.categoria.nombre_categoria }}</td>
+                            <td class="acciones">
+                                <a href="{% url 'inventario:actualizar_item' item.id %}" class="btn small edit">
+                                    Editar
+                                </a>
+                                <a href="{% url 'inventario:eliminar_item' item.id %}" class="btn small delete">
+                                    Eliminar
+                                </a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="10">No hay items registrados</td>
+                        </tr>
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
