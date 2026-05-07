@@ -3,7 +3,7 @@
 
 {% block update_empleado %}
 <div class="container">
-    <form method="POST" action="{% url 'actualizar_empleado' empleado.id %}">
+    <form method="POST" action="{% url 'rrhh:actualizar_empleado' empleado.id %}">
     {% csrf_token %}
 
     <div class="row d-flex justify-content-center mt-3">

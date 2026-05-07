@@ -40,7 +40,7 @@
                 <td>
                     <div class="row">
                         <div class="col">
-                            <a href="{% url 'editar_empleado' empleado.id %}">
+                            <a href="{% url 'rrhh:editar_empleado' empleado.id %}">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                     class="bi bi-pen" viewBox="0 0 16 16">
                                     <path
@@ -49,7 +49,7 @@
                             </a>
                         </div>
                         <div class="col">
-                            <a href="{% url 'novedades' empleado.id %}">
+                            <a href="{% url 'rrhh:novedades' empleado.id %}">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                     class="bi bi-journal-check" viewBox="0 0 16 16">
                                     <path fill-rule="evenodd"
@@ -62,7 +62,7 @@
                             </a>
                         </div>
                         <div class="col">
-                            <a href="{% url 'certificado_laboral' empleado.id %}">
+                            <a href="{% url 'rrhh:certificado_laboral' empleado.id %}">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                     class="bi bi-file-medical" viewBox="0 0 16 16">
                                     <path
@@ -73,7 +73,7 @@
                             </a>
                         </div>
                         <div class="col">
-                            <a class="text-danger" href="{% url 'eliminar_empleado' empleado.id %}" onclick="return confirm('Desea eliminar este empleado?')">
+                            <a class="text-danger" href="{% url 'rrhh:eliminar_empleado' empleado.id %}" onclick="return confirm('Desea eliminar este empleado?')">
                                 Eliminar
                             </a>
                         </div>

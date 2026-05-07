@@ -41,7 +41,7 @@
                         </a>
                     </div>
                     <div class="col">
-                        <a class="btn btn-warning" href="{% url 'eliminar_area' area.id %}">
+                        <a class="btn btn-warning" href="{% url 'rrhh:eliminar_area' area.id %}">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                 class="bi bi-trash3-fill" viewBox="0 0 16 16">
                                 <path
@@ -62,7 +62,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form method="POST" action="{% url 'editar_area' area.id %}">
+                        <form method="POST" action="{% url 'rrhh:editar_area' area.id %}">
                             {% csrf_token %}
                             {{ form }}
                             <div class="row">
@@ -91,7 +91,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form method="POST" action="{% url 'agregar_area' %}">
+                        <form method="POST" action="{% url 'rrhh:agregar_area' %}">
                             {% csrf_token %}
                             {{ form }}
                             <div class="row">
@@ -134,7 +134,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form method="POST" action="{% url 'agregar_area' %}">
+                        <form method="POST" action="{% url 'rrhh:agregar_area' %}">
                             {% csrf_token %}
                             {{ form }}
                             <div class="row">
