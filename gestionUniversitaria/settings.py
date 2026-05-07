@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     #registrar aplicaciones
     'RecursosHumanos',
-    'inventario.apps.inventarioConfig',
+    'inventario',
     'Contabilidad',
     'gestionAcademica',
     'solicitudes',

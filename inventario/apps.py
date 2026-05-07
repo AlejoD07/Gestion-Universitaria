@@ -1,9 +1,9 @@
 ﻿from django.apps import AppConfig
 
 
-class inventarioConfig(AppConfig):
+class InventarioConfig(AppConfig):
     name = 'inventario'
-    label = 'inventario'
+
 
 
 
