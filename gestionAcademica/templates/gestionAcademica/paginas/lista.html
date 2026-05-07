@@ -1,0 +1,40 @@
+{% extends 'gestionAcademica/primary-layout.html' %}
+{% block titulo %}{{ titulo }}{% endblock %}
+{% block contenido %}
+
+<h1>{{ titulo }}</h1>
+
+<a href="{% url crear_url %}" class="btn btn-primario" style="margin-bottom: 20px; display: inline-block;">+ Nuevo Registro</a>
+
+<table>
+    <thead>
+        <tr>
+            {% for encabezado in encabezados %}
+                <th>{{ encabezado }}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for fila in filas %}
+            <tr>
+                {% for celda in fila %}
+                    {% if not forloop.last %}
+                        <td>{{ celda }}</td>
+                    {% endif %}
+                {% endfor %}
+                <td>
+                    {% with registro_id=fila|last %}
+                        <a href="{% url editar_url registro_id %}" class="btn btn-secundario">Editar</a>
+                        <a href="{% url eliminar_url registro_id %}" class="btn btn-peligro btn-eliminar">Eliminar</a>
+                    {% endwith %}
+                </td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="{{ encabezados|length }}" style="text-align: center; padding: 20px; color: #888;">{{ vacio }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
