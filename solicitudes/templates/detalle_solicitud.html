@@ -1,0 +1,57 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Sistema de Solicitudes</title>
+        <link rel="stylesheet" type="text/css" href="{% static 'solicitudes/style.css' %}">
+    </head>
+    <body style="margin:0; font-family: Arial, sans-serif;">
+
+        <div style="background-color: #3a4857; color: white; padding: 15px; display: flex; justify-content: space-between;">
+            <div>
+                <h2 style="margin:0;">Sistema Universitario</h2>
+                <p style="margin:0;">Módulo de Gestión de Quejas</p>
+            </div>
+            <div style="padding: 14px;">
+                <a style="color: white; margin-right: 15px;">Mis Quejas</a>
+                <a style="color: white;">Cerrar Sesión</a>
+            </div>
+        </div>
+
+        <div style="padding:20px; display: flex; justify-content: space-between;">
+            <h2>Historial de Queja ID: {{ id }}</h2>
+
+            <a href="{% url 'solicitudes:ejemplo_for' id=id %}" style="padding: 17px 10px; border: 1px solid; border-radius: 8px; background: rgb(249, 133, 74); color: white; text-decoration: none;">Volver</a>
+        </div>
+
+        <div style="padding:20px;">
+            <table style="border-collapse: collapse; width:100%; border: 1px solid;">
+                <tr style="background: #62adef;">
+                    <th style="border: 1px solid; text-align: center; height: 35px;">ID Historia</th>
+                    <th style="border: 1px solid; text-align: center; height: 35px;">Comentario</th>
+                    <th style="border: 1px solid; text-align: center; height: 35px;">Estado</th>
+                    <th style="border: 1px solid; text-align: center; height: 35px;">Fecha</th>
+                </tr>
+                {% if status == 200 %}
+                    {% for solicitud in solicitudes %}
+                        <tr style="background: antiquewhite;">
+                            <td style="border: 1px solid; text-align: center; height: 35px;">{{ solicitud.id }}</td>
+                            <td style="border: 1px solid; text-align: center; height: 35px;">{{ solicitud.comentario }}</td>
+                            <td style="border: 1px solid; text-align: center; height: 35px;">{{ solicitud.estado.nombre }}</td>
+                            <td style="border: 1px solid; text-align: center; height: 35px;">{{ solicitud.fecha }}</td>
+                        </tr>
+                    {% endfor %}
+                {% elif status == 200 and not solicitudes %}
+                    <tr>
+                        <td colspan="4" style="text-align: center; height: 35px;">No hay historial para esta solicitud.</td>
+                    </tr>
+                {% elif status == 404 %}
+                    <div style="background: #f8d7da; color: #721c24; padding: 10px; border-radius: 5px;">
+                        <p style="margin:0;">Error: No se encontró historia para la solicitud con el ID proporcionado.</p>  
+                    </div>
+                {% endif %}
+            </table>
+        </div>
+    </body>
+</html>

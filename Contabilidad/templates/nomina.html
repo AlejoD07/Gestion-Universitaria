@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Gestor Universidad - Nómina</title>
+</head>
+<body style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px;">
+
+    <div style="background-color: white; width: 60%; margin: auto; padding: 20px; border: 1px solid #ccc; border-radius: 8px;">
+        <h1 style="text-align: center;">Detalle de Pago Mensual</h1>
+
+        <p><strong>Empleado:</strong> {{ nomina.empleado }}</p>
+        <p><strong>Cargo:</strong> {{ nomina.cargo }}</p>
+
+        {% if nomina.activo %}
+            <p><strong>Estado:</strong> Contrato Vigente</p>
+        {% else %}
+            <p><strong>Estado:</strong> Inactivo / Liquidado</p>
+        {% endif %}
+
+        <h3 style="background-color: #ecf0f1; padding: 10px;">Detalle de Conceptos</h3>
+        
+        <table style="width: 100%; border-collapse: collapse;">
+            <tr>
+                <th style="text-align: left; padding: 10px;">Concepto</th>
+                <th style="text-align: right; padding: 10px;">Valor</th>
+            </tr>
+            
+            {% for item in nomina.conceptos %}
+            <tr style="border-bottom: 1px solid #ddd;">
+                <td style="padding: 10px;">{{ item.nombre }}</td>
+                <td style="padding: 10px; text-align: right;">$ {{ item.valor }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <div style="margin-top: 20px; text-align: right;">
+            <h2>Total: $ {{ nomina.sueldo_base }}</h2>
+        </div>
+    </div>
+
+</body>
+</html>

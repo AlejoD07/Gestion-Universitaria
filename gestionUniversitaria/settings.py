@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'Inventario',
     'Contabilidad',
     'gestionAcademica',
+    'solicitudes',
 ]
 
 MIDDLEWARE = [

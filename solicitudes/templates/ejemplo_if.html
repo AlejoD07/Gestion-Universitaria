@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sistema de Solicitudes</title>
+</head>
+<body style="margin:0; font-family: Arial, sans-serif;">
+
+    <div style="background-color: #3a4857; color: white; padding: 15px; display: flex; justify-content: space-between;">
+        <div>
+            <h2 style="margin:0;">Sistema Universitario</h2>
+            <p style="margin:0;">Módulo de Gestión de Solicitudes</p>
+        </div>
+        <div style="padding: 14px;">
+            <a style="color: white; margin-right: 15px;">Inicio</a>
+            <a style="color: white; margin-right: 15px;">Mis Solicitudes</a>
+            <a style="color: white;">Cerrar Sesión</a>
+        </div>
+    </div>
+
+    <div style="padding:20px;">
+        {% if registro %}
+            <div style="border:1px solid; padding:20px; width:350px; background: antiquewhite;">
+            
+                <h3>Detalle de la solicitud</h3>
+                <hr>
+                <p>
+                    <strong>ID:</strong> {{registro.id}}
+                </p>
+                <p>
+                    <strong>Tipo:</strong> {{registro.tipo}}
+                </p>
+                <p>
+                    <strong>Fecha:</strong> {{registro.fecha}}
+                </p>
+                <hr>
+                <p>
+                    <strong>Estado:</strong> {{registro.estado}}
+                </p>
+                <hr>
+                <p>
+                    <strong>Descripción:</strong>
+                </p>
+                <p>
+                    Esta solicitud corresponde a un proceso realizado por el/la estudiante {{registro.usuario}}
+                    dentro del sistema académico.
+                </p>
+            </div>
+        {% else %}
+            <div style="padding:20px; border:1px solid;">
+                <h3>No se encontró la solicitud</h3>
+                <p>El registro que buscas no existe.</p>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
