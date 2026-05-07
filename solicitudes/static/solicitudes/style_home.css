@@ -1,11 +1,11 @@
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: #f5f5f5;
     color: #444;
 }
 .header {
-    background: #4a5560;
+    background: linear-gradient(90deg, #ff5a2c, #ff7a50);
     color: white;
     padding: 15px 25px;
 }
@@ -27,7 +27,7 @@ body {
     text-align: center;
 }
 .hero h1 {
-    color: #d97706;
+    color: #ff5a2c;
     margin-bottom: 10px;
 }
 .hero p {
@@ -38,7 +38,7 @@ body {
     padding: 10px 20px;
     border: none;
     border-radius: 8px;
-    background: #e67e22;
+    background: #ff5a2c;
     color: white;
     cursor: pointer;
     font-size: 14px;
@@ -60,7 +60,7 @@ body {
 }
 .card h3 {
     margin-top: 0;
-    color: #4a5560;
+    color: #333;
 }
 .card p {
     color: #666;
@@ -73,10 +73,89 @@ body {
 .div-redirect a {
     display: inline-block;
     text-decoration: none;
-    background: #fff4e8;
-    color: #d97706;
-    border: 1px solid #e4c9a8;
+    background: #ff5a2c;
+    color: white;
+    border: 1px solid #ff5a2c;
     border-radius: 8px;
     padding: 6px 12px;
     margin: 0 5px;
+}
+
+
+.boton-principal {
+    display: inline-block;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    background: #ff5a2c;
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.listado {
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 0 24px;
+}
+
+.listado h1 {
+    color: #ff5a2c;
+    margin-bottom: 18px;
+}
+
+.listado table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,.08);
+}
+
+.listado th,
+.listado td {
+    padding: 12px 14px;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+}
+
+.listado th {
+    background: #f1f1f1;
+}
+
+.listado td a {
+    color: #ff5a2c;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+@media (max-width: 900px) {
+    .header div {
+        float: none;
+        margin-top: 12px;
+    }
+
+    .cards {
+        flex-direction: column;
+    }
+
+    .card {
+        width: 100%;
+    }
+}
+
+.div-redirect a,
+.boton-principal {
+    color: white !important;
+    min-width: 118px;
+    text-align: center;
+    font-weight: 600;
+}
+
+.div-redirect a:hover,
+.boton-principal:hover {
+    background: #e84b20;
 }

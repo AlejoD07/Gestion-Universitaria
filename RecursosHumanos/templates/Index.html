@@ -35,13 +35,19 @@
 
                 <h3 class="mb-5 alinear-items">Bienvenido</h3>
 
-                <div class="d-flex flex-column align-items-center">
-                    <input type="text" class="form-control mb-3 w-75" placeholder="Usuario">
-                    <input type="password" class="form-control mb-3 w-75" placeholder="Contraseña">
-                </div>
-                <div class="d-flex justify-content-center">
-                    <button type="button" class="btn btn-success alinear-items" id="inicioBoton">Ingresar</button>
-                </div>
+                <form method="POST">
+                    {% csrf_token %}
+                    {% if error %}
+                        <div class="alert alert-danger w-75 mx-auto">{{ error }}</div>
+                    {% endif %}
+                    <div class="d-flex flex-column align-items-center">
+                        <input type="text" class="form-control mb-3 w-75" placeholder="Usuario" name="usuario" required>
+                        <input type="password" class="form-control mb-3 w-75" placeholder="Contrasena" name="contrasena" required>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <button type="submit" class="btn btn-success alinear-items" id="inicioBoton">Ingresar</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -63,3 +69,4 @@
 </body>
 
 </html>
+

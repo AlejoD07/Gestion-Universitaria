@@ -1,10 +1,10 @@
-{% load static %}
+﻿{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inventario Academico</title>
+    <title>inventario académico</title>
 
     <link rel="stylesheet" href="{% static 'inventario/home.css' %}">
 </head>
@@ -12,18 +12,18 @@
 
 <header>
     <div class="hero">
-        <h2>Inventario Académico</h2>
+        <h2>inventario académico</h2>
         <p>Gestiona productos, préstamos y control de stock de forma eficiente</p>
     </div>
     <div class="header-container">
-        <h1>Inventario Academico</h1>
+        <h1>inventario académico</h1>
         <nav>
             <ul>
-                <li><a href="{% url 'inventario:home' %}">Inicio</a></li>
-                <li><a href="{% url 'academica_inicio' %}">Gestion Academica</a></li>
-                <li><a  href="{% url 'contabilidad_inicio' %}">Contabilidad</a></li>
+                <li><a href="{% url 'inventario:home' %}">inventario</a></li>
+                <li><a href="{% url 'academica_inicio' %}">Gestión Académica</a></li>
+                <li><a href="{% url 'contabilidad_inicio' %}">Contabilidad</a></li>
                 <li><a href="{% url 'home' %}">Recursos Humanos</a></li>
-                <li><a>Solicitudes</a></li>
+                <li><a href="{% url 'solicitudes:home' %}">Solicitudes</a></li>
             </ul>
         </nav>
     </div>
@@ -46,3 +46,6 @@
 
 </body>
 </html>
+
+
+

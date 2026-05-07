@@ -1,0 +1,56 @@
+﻿{% extends "home.html" %}
+
+{% block main %}
+<div class="form-card">
+    <h2>{% if item %}Editar item{% else %}Nuevo item{% endif %}</h2>
+    {% if item %}
+        <form method="POST" action="{% url 'inventario:actualizar_item' item.id %}">
+    {% else %}
+        <form method="POST" action="{% url 'inventario:guardar_item' %}">
+    {% endif %}
+        {% csrf_token %}
+        <div class="form-group">
+            <label>Nombre item</label>
+            {{ formulario.nombre_item }}
+        </div>
+        {% if not item %}
+            <div class="form-group">
+                <label>Marca item</label>
+                {{ formulario.marca_item }}
+            </div>
+        {% endif %}
+        <div class="form-group">
+            <label>Descripción item</label>
+            {{ formulario.descripcion_item }}
+        </div>
+        <div class="form-group">
+            <label>Ubicación item</label>
+            {{ formulario.ubicacion_item }}
+        </div>
+        <div class="form-group">
+            <label>Estado item</label>
+            {{ formulario.estado_item }}
+        </div>
+        <div class="form-group">
+            <label>Categoria</label>
+            {{ formulario.categoria }}
+        </div>
+        {% if not item %}
+            <div class="form-group">
+                <label>Fecha compra item</label>
+                {{ formulario.fecha_compra }}
+            </div>
+            <div class="form-group">
+                <label>Valor item</label>
+                {{ formulario.valor_item }}
+            </div>
+        {% endif %}
+        <div class="form-actions">
+            <button type="submit" class="btn">Guardar</button>
+            <a href="{% url 'inventario:items' %}" class="btn edit">Cancelar</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+

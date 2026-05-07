@@ -1,4 +1,4 @@
-from django.contrib import messages
+﻿from django.contrib import messages
 from django.db.models import ProtectedError
 from django.db.models import Q
 from decimal import Decimal, InvalidOperation
@@ -426,7 +426,7 @@ def _render_materia_form(request, titulo, volver_url, materia=None):
         {'label': 'Nombre', 'name': 'nombre', 'type': 'text', 'value': getattr(materia, 'nombre', ''), 'required': True},
         {'label': 'Programa', 'name': 'programa', 'type': 'select', 'required': True, 'options': _opciones(Programa.objects.all(), getattr(getattr(materia, 'programa', None), 'pk', None))},
         {'label': 'Creditos', 'name': 'creditos', 'type': 'number', 'value': getattr(materia, 'creditos', 3), 'required': True},
-        {'label': 'Descripcion', 'name': 'descripcion', 'type': 'textarea', 'value': getattr(materia, 'descripcion', '')},
+        {'label': 'Descripción', 'name': 'descripcion', 'type': 'textarea', 'value': getattr(materia, 'descripcion', '')},
         {'label': 'Activa', 'name': 'activa', 'type': 'checkbox', 'checked': True if materia is None else materia.activa},
     ])
     return render(request, 'gestionAcademica/paginas/formulario.html', {'titulo': titulo, 'volver_url': volver_url, 'campos': campos})
@@ -440,7 +440,7 @@ def lista_periodos(request):
     periodos = PeriodoAcademico.objects.all()
     filas = [[periodo.nombre, periodo.fecha_inicio, periodo.fecha_fin, periodo.id] for periodo in periodos]
     return render(request, 'gestionAcademica/paginas/lista.html', {
-        'titulo': 'Periodos Academicos',
+        'titulo': 'Periodos Académicos',
         'crear_url': 'crear_periodo',
         'encabezados': ['Nombre', 'Fecha inicio', 'Fecha fin', 'Acciones'],
         'filas': filas,
@@ -458,7 +458,7 @@ def crear_periodo(request):
             fecha_fin=request.POST['fecha_fin'],
         )
         return redirect('lista_periodos')
-    return _render_periodo_form(request, 'Nuevo Periodo Academico', 'lista_periodos')
+    return _render_periodo_form(request, 'Nuevo Periodo Académico', 'lista_periodos')
 
 
 def editar_periodo(request, id):
@@ -469,7 +469,7 @@ def editar_periodo(request, id):
         periodo.fecha_fin = request.POST['fecha_fin']
         periodo.save()
         return redirect('lista_periodos')
-    return _render_periodo_form(request, 'Editar Periodo Academico', 'lista_periodos', periodo)
+    return _render_periodo_form(request, 'Editar Periodo Académico', 'lista_periodos', periodo)
 
 
 def _render_periodo_form(request, titulo, volver_url, periodo=None):
@@ -676,3 +676,5 @@ def saludo_autor(request, id_usuario):
     usuario = get_object_or_404(Usuario, id_usuario=id_usuario)
     usuarios = Usuario.objects.all()
     return render(request, 'saludo_autor.html', {'usuario': usuario, 'usuarios': usuarios})
+
+

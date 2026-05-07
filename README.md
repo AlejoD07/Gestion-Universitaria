@@ -1,4 +1,4 @@
-# ProyectoDjango
+﻿# ProyectoDjango
 Proyecto para la materia de Django
 
 Nombres de los integrantes:
@@ -14,4 +14,5 @@ Nombres de los modulos (aplicaciones):
 1. Recursos humanos 
 2. Gestión académica 
 3. Contabilidad 
-4. Inventario
+4. inventario
+

@@ -1,0 +1,64 @@
+{% load static %}
+
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Solicitudes</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'solicitudes/style_quejas.css' %}">
+</head>
+<body>
+
+<div class="contenedor-principal">
+
+    {% if statusForm == 200 %}
+        <div class="card-formulario">
+            <div class="header-formulario">
+                <a href="{% url 'solicitudes:home' %}" class="link-volver">Volver</a>
+                <a href="{% url 'home_general' %}" class="link-volver principal">Inicio general</a>
+            </div>
+            <h1 class="titulo">Nueva {{ tipo_solicitud.nombre|default:"solicitud" }}</h1>
+            <p class="subtitulo">Completa la informacion para registrar tu solicitud.</p>
+
+            <form method="post">
+                {% csrf_token %}
+
+                <div class="grupo-campo">
+                    <label for="id_tipos">Tipo</label>
+                    <select name="tipos" required id="id_tipos">
+                        <option value="">Selecciona un tipo</option>
+                        {% for tipo in formulario_quejas.tipos.field.queryset %}
+                            <option value="{{ tipo.id }}" {% if tipo_solicitud and tipo.id == tipo_solicitud.id %}selected{% endif %}>{{ tipo.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="grupo-campo">
+                    <label for="id_prioridad">Prioridad</label>
+                    <select name="prioridad" id="id_prioridad" required>
+                        <option value="">Selecciona una prioridad</option>
+                        <option value="Baja">Baja</option>
+                        <option value="Media">Media</option>
+                        <option value="Alta">Alta</option>
+                    </select>
+                </div>
+
+                <div class="grupo-campo">
+                    <label for="id_observaciones">Observaciones</label>
+                    <textarea name="observaciones" id="id_observaciones" placeholder="Escribe tu observacion aqui..." required></textarea>
+                </div>
+
+                <button type="submit" class="boton-enviar">Enviar</button>
+            </form>
+
+            {% if exitoso %}
+                <div class="mensaje mensaje-exito">Solicitud enviada con exito.</div>
+            {% elif exitoso == False %}
+                <div class="mensaje mensaje-error">Hubo un error al enviar la solicitud. Por favor, intentalo nuevamente.</div>
+            {% endif %}
+        </div>
+    {% endif %}
+
+</div>
+
+</body>
+</html>

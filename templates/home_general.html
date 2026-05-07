@@ -1,0 +1,109 @@
+﻿{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion Universitaria</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f4f6f9;
+            color: #333;
+        }
+
+        .hero {
+            background: linear-gradient(90deg, #ff5a2c, #ff7a50);
+            color: white;
+            padding: 60px 40px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        .hero p {
+            font-size: 18px;
+            opacity: .95;
+        }
+
+        .contenedor {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 24px;
+        }
+
+        .apps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .app-card {
+            background: white;
+            border-radius: 10px;
+            padding: 26px;
+            box-shadow: 0 2px 8px rgba(0,0,0,.08);
+            text-decoration: none;
+            color: #333;
+            border-top: 4px solid #ff5a2c;
+            transition: .25s;
+        }
+
+        .app-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .app-card h2 {
+            font-size: 21px;
+            margin-bottom: 10px;
+        }
+
+        .app-card p {
+            color: #666;
+            line-height: 1.45;
+        }
+    </style>
+</head>
+<body>
+    <section class="hero">
+        <h1>Gestion Universitaria</h1>
+        <p>Selecciona el modulo que quieres administrar</p>
+    </section>
+
+    <main class="contenedor">
+        <div class="apps">
+            <a class="app-card" href="{% url 'inventario:home' %}">
+                <h2>inventario</h2>
+                <p>Items, categorías, préstamos y control de stock.</p>
+            </a>
+            <a class="app-card" href="{% url 'academica_inicio' %}">
+                <h2>Gestión Académica</h2>
+                <p>Usuarios, estudiantes, materias, inscripciones, notas y asistencias.</p>
+            </a>
+            <a class="app-card" href="{% url 'contabilidad_inicio' %}">
+                <h2>Contabilidad</h2>
+                <p>Nominas, presupuestos e ingresos institucionales.</p>
+            </a>
+            <a class="app-card" href="{% url 'home' %}">
+                <h2>Recursos Humanos</h2>
+                <p>Empleados, areas, novedades y certificados laborales.</p>
+            </a>
+            <a class="app-card" href="{% url 'solicitudes:home' %}">
+                <h2>Solicitudes</h2>
+                <p>Solicitudes, quejas y reclamos de la universidad.</p>
+            </a>
+        </div>
+    </main>
+</body>
+</html>
+
+

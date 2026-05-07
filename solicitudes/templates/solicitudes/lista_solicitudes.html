@@ -1,0 +1,57 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solicitudes</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'solicitudes/style_home.css' %}">
+</head>
+<body>
+    <div class="header">
+        <h2>{% if tipo_solicitud %}{{ tipo_solicitud.nombre }}{% else %}Solicitudes{% endif %}</h2>
+        <div>
+            <a href="{% url 'home_general' %}">Inicio general</a>
+            <a href="{% url 'solicitudes:home' %}">Solicitudes</a>
+        </div>
+    </div>
+
+    <main class="listado">
+        <h1>{% if tipo_solicitud %}Listado de {{ tipo_solicitud.nombre }}{% else %}Listado general{% endif %}</h1>
+        {% if tipo_solicitud %}
+            <a class="boton-principal" href="{% url 'solicitudes:crear_tipo' tipo=tipo_solicitud.nombre|lower %}">Crear {{ tipo_solicitud.nombre }}</a>
+        {% endif %}
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Tipo</th>
+                    <th>Usuario</th>
+                    <th>Prioridad</th>
+                    <th>Estado</th>
+                    <th>Fecha</th>
+                    <th>Detalle</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for solicitud in solicitudes %}
+                    <tr>
+                        <td>{{ solicitud.id }}</td>
+                        <td>{{ solicitud.tipo.nombre }}</td>
+                        <td>{{ solicitud.usuario.nombre_usuario }}</td>
+                        <td>{{ solicitud.prioridad }}</td>
+                        <td>{{ solicitud.estado.nombre }}</td>
+                        <td>{{ solicitud.fecha_creacion|date:"d/m/Y H:i" }}</td>
+                        <td><a href="{% url 'solicitudes:detalle_solicitud' id=solicitud.id %}">Ver</a></td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="7">No hay registros.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </main>
+</body>
+</html>

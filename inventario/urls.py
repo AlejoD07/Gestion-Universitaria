@@ -1,4 +1,4 @@
-from django.urls import path
+﻿from django.urls import path
 from . import views
 
 app_name = "inventario"
@@ -22,3 +22,4 @@ urlpatterns = [
     path('eliminar_prestamo/<int:id>/', views.eliminar_prestamo, name='eliminar_prestamo'),
     path('lista_inventario/', views.lista_inventario, name='lista_inventario')
 ]
+

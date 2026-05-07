@@ -1,15 +1,33 @@
-{% load static %}
+﻿{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestion Academica - {% block titulo %}{% endblock %}</title>
+    <title>Gestión Académica - {% block titulo %}{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'gestionAcademica/CSS/styleAcademica.css' %}">
 </head>
 <body>
-    <nav class="barra-navegacion">
-        <span class="marca">Gestion Academica</span>
+    <header>
+        <div class="hero modulo-hero">
+            <h2>Gestión Académica</h2>
+            <p>Administra usuarios, estudiantes, materias, inscripciones, notas y asistencias</p>
+        </div>
+        <div class="header-container">
+            <h1>Gestión Académica</h1>
+            <nav class="menu-global">
+                <ul>
+                    <li><a href="{% url 'inventario:home' %}">inventario</a></li>
+                    <li><a href="{% url 'academica_inicio' %}">Gestión Académica</a></li>
+                    <li><a href="{% url 'contabilidad_inicio' %}">Contabilidad</a></li>
+                    <li><a href="{% url 'home' %}">Recursos Humanos</a></li>
+                    <li><a href="{% url 'solicitudes:home' %}">Solicitudes</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <nav class="menu-modulo">
         <a href="{% url 'academica_inicio' %}">Inicio</a>
         <a href="{% url 'lista_usuarios' %}">Usuarios</a>
         <a href="{% url 'lista_profesores' %}">Profesores</a>
@@ -35,3 +53,5 @@
     <script src="{% static 'gestionAcademica/JS/academica.js' %}"></script>
 </body>
 </html>
+
+

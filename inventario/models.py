@@ -1,8 +1,8 @@
-from django.db import models
+﻿from django.db import models
 
 class Categoria(models.Model):
     nombre_categoria = models.CharField(max_length=100)
-    descripcion_categoria = models.TextField(help_text="Descripcion de la categoria del inventario", blank=True, null=True)
+    descripcion_categoria = models.TextField(help_text="Descripción de la categoria del inventario", blank=True, null=True)
     fecha_creacion_categoria = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -20,7 +20,7 @@ ESTADOS_ITEM = [
 class Item(models.Model):
     nombre_item = models.CharField(max_length=200)
     marca_item = models.CharField(max_length=100)
-    descripcion_item = models.TextField(help_text="Descripcion del item del inventario", blank=True, null=True)
+    descripcion_item = models.TextField(help_text="Descripción del item del inventario", blank=True, null=True)
     ubicacion_item = models.CharField(max_length=50, help_text="Ej: Salon 203 - laboratorio")
     fecha_registro = models.DateTimeField(auto_now_add=True)
     fecha_compra = models.DateField()
@@ -57,3 +57,6 @@ class Prestamo(models.Model):
         related_name="items",
         related_query_name="item"
     )
+
+
+

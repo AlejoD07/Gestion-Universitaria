@@ -1,4 +1,4 @@
-{% extends '../primary-layout.html' %}
+﻿{% extends '../primary-layout.html' %}
 {% load static %}
 
 
@@ -72,6 +72,11 @@
                                 </svg>
                             </a>
                         </div>
+                        <div class="col">
+                            <a class="text-danger" href="{% url 'eliminar_empleado' empleado.id %}" onclick="return confirm('Desea eliminar este empleado?')">
+                                Eliminar
+                            </a>
+                        </div>
                     </div>
                 </td>
             </tr>
@@ -87,3 +92,4 @@
     </table>
 </div>
 {% endblock %}
+

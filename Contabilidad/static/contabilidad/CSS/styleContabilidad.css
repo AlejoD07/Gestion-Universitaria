@@ -5,9 +5,81 @@
 }
 
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #f4f6f9;
     color: #333;
+}
+
+header {
+    background: white;
+    border-bottom: 1px solid #ddd;
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    padding: 15px 40px;
+    flex-wrap: wrap;
+}
+
+.header-container h1 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    border: 0;
+    margin: 0;
+    padding: 0;
+}
+
+.hero {
+    background: linear-gradient(90deg, #ff5a2c, #ff7a50);
+    color: white;
+    padding: 45px 40px;
+    text-align: center;
+}
+
+.hero h2 {
+    font-size: 36px;
+    margin-bottom: 10px;
+    color: white;
+}
+
+.hero p {
+    font-size: 17px;
+    opacity: 0.95;
+}
+
+.menu-global ul {
+    list-style: none;
+    display: flex;
+    gap: 22px;
+    flex-wrap: wrap;
+}
+
+.menu-global a,
+.menu-modulo a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    padding: 5px;
+    transition: 0.3s;
+}
+
+.menu-global a:hover,
+.menu-modulo a:hover {
+    color: #ff5a2c;
+    border-bottom: 2px solid #ff5a2c;
+}
+
+.menu-modulo {
+    background: white;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    gap: 20px;
+    padding: 10px 40px;
+    flex-wrap: wrap;
 }
 
 .contenedor {
@@ -19,81 +91,84 @@ body {
 h1 {
     font-size: 24px;
     margin-bottom: 20px;
-    color: #2c3e50;
-    border-bottom: 2px solid #2980b9;
+    color: #333;
+    border-bottom: 2px solid #ff5a2c;
     padding-bottom: 8px;
 }
 
 h2 {
     font-size: 18px;
     margin-bottom: 15px;
-    color: #2c3e50;
+    color: #333;
 }
 
 .btn {
     display: inline-block;
     padding: 8px 16px;
     border: none;
-    border-radius: 4px;
+    border-radius: 8px;
     cursor: pointer;
     font-size: 14px;
     text-decoration: none;
     margin-right: 5px;
+    margin-bottom: 5px;
+    font-weight: 600;
 }
 
 .btn-primario {
-    background-color: #2980b9;
+    background-color: #ff5a2c;
     color: white;
 }
 
 .btn-primario:hover {
-    background-color: #1f6391;
+    background-color: #e84b20;
 }
 
 .btn-peligro {
-    background-color: #e74c3c;
+    background-color: #dc3545;
     color: white;
 }
 
 .btn-peligro:hover {
-    background-color: #c0392b;
+    background-color: #b02a37;
 }
 
 .btn-secundario {
-    background-color: #95a5a6;
+    background-color: #6c757d;
     color: white;
 }
 
 .btn-secundario:hover {
-    background-color: #7f8c8d;
+    background-color: #5c636a;
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
     background-color: white;
-    border-radius: 6px;
+    border-radius: 10px;
     overflow: hidden;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
 }
 
 thead {
-    background-color: #2980b9;
-    color: white;
+    background-color: #f1f1f1;
+    color: #333;
 }
 
 thead th {
     padding: 12px 15px;
     text-align: left;
     font-size: 14px;
+    border-bottom: 2px solid #ddd;
 }
 
 tbody tr {
-    border-bottom: 1px solid #ecf0f1;
+    border-bottom: 1px solid #eee;
 }
 
 tbody tr:hover {
-    background-color: #f0f4f8;
+    background-color: #f9f9f9;
 }
 
 tbody td {
@@ -104,8 +179,8 @@ tbody td {
 .formulario {
     background-color: white;
     padding: 25px;
-    border-radius: 6px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     max-width: 600px;
 }
 
@@ -126,7 +201,7 @@ tbody td {
     width: 100%;
     padding: 9px 12px;
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 5px;
     font-size: 14px;
     color: #333;
 }
@@ -134,7 +209,7 @@ tbody td {
 .campo input:focus,
 .campo select:focus,
 .campo textarea:focus {
-    border-color: #2980b9;
+    border-color: #ff5a2c;
     outline: none;
 }
 
@@ -147,18 +222,18 @@ tbody td {
 
 .tarjeta {
     background-color: white;
-    border-radius: 6px;
+    border-radius: 10px;
     padding: 20px 25px;
     flex: 1;
     min-width: 160px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-    border-left: 4px solid #2980b9;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    border-left: 4px solid #ff5a2c;
 }
 
 .tarjeta .numero {
     font-size: 28px;
     font-weight: bold;
-    color: #2980b9;
+    color: #ff5a2c;
 }
 
 .tarjeta .etiqueta {
@@ -168,17 +243,17 @@ tbody td {
 }
 
 .estado-pagado {
-    background-color: #27ae60;
+    background-color: #28a745;
     color: white;
     padding: 3px 8px;
-    border-radius: 4px;
+    border-radius: 5px;
     font-size: 12px;
 }
 
 .estado-pendiente {
-    background-color: #e67e22;
+    background-color: #ff5a2c;
     color: white;
     padding: 3px 8px;
-    border-radius: 4px;
+    border-radius: 5px;
     font-size: 12px;
 }

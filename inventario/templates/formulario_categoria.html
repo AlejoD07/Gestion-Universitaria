@@ -1,0 +1,28 @@
+﻿{% extends "home.html" %}
+
+{% block main %}
+<div class="form-card">
+    <h2>{% if categoria %}Editar categoria{% else %}Nueva categoria{% endif %}</h2>
+    {% if categoria %}
+        <form method="POST" action="{% url 'inventario:actualizar_categoria' categoria.id %}">
+    {% else %}
+        <form method="POST" action="{% url 'inventario:guardar_categoria' %}">
+    {% endif %}
+        {% csrf_token %}
+        <div class="form-group">
+            <label>Nombre categoria</label>
+            {{ formulario.nombre_categoria }}
+        </div>
+        <div class="form-group">
+            <label>Descripción categoria</label>
+            {{ formulario.descripcion_categoria }}
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn">Guardar</button>
+            <a href="{% url 'inventario:categorias' %}" class="btn edit">Cancelar</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+

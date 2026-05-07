@@ -1,4 +1,4 @@
-{%load static%}
+﻿{%load static%}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,11 +12,29 @@
 </head>
 
 <body>
+    <header style="background: white; border-bottom: 1px solid #ddd; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+        <div style="background: linear-gradient(90deg, #ff5a2c, #ff7a50); color: white; padding: 35px 40px; text-align: center;">
+            <h2 style="font-size: 34px; margin-bottom: 8px;">Recursos Humanos</h2>
+            <p style="font-size: 16px; margin: 0; opacity: .95;">Gestiona empleados, areas, novedades y certificados laborales</p>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 15px 40px; flex-wrap: wrap;">
+            <h1 style="font-size: 24px; font-weight: bold; margin: 0; color: #333;">Recursos Humanos</h1>
+            <nav>
+                <ul style="list-style: none; display: flex; gap: 22px; flex-wrap: wrap; margin: 0; padding: 0;">
+                    <li><a style="text-decoration: none; color: #333; font-weight: 500;" href="{% url 'inventario:home' %}">inventario</a></li>
+                    <li><a style="text-decoration: none; color: #333; font-weight: 500;" href="{% url 'academica_inicio' %}">Gestión Académica</a></li>
+                    <li><a style="text-decoration: none; color: #333; font-weight: 500;" href="{% url 'contabilidad_inicio' %}">Contabilidad</a></li>
+                    <li><a style="text-decoration: none; color: #ff5a2c; font-weight: 700;" href="/rrhh/home/">Recursos Humanos</a></li>
+                    <li><a style="text-decoration: none; color: #333; font-weight: 500;" href="{% url 'solicitudes:home' %}">Solicitudes</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
     <main>
         <div>
             <nav class="navbar bg-primary-subtle">
                 <div class="container-fluid">
-                    <a class="navbar-brand" href="{% url 'inicio' %}">
+                    <a class="navbar-brand" href="/rrhh/inicio/">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                             class="bi bi-file-earmark-person-fill" viewBox="0 0 16 16">
                             <path
@@ -26,7 +44,7 @@
                     </a>
                     <ul class="nav justify-content-end">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Exit
+                            <a class="nav-link active" aria-current="page" href="/rrhh/home/">Exit
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                     class="bi bi-box-arrow-right" viewBox="0 0 16 16">
                                     <path fill-rule="evenodd"
@@ -44,10 +62,10 @@
     <section class="container mt-2">
         <nav class="navbar navbar-expand-lg">
             <div class="container-fluid">
-                <a class="navbar-brand fw-bold" href="{% url 'inicio' %}">
+                <a class="navbar-brand fw-bold" href="/rrhh/inicio/">
                     EMPLEADOS
                 </a>
-                <!-- Botón hamburguesa -->
+                <!-- Botón hamburguesa -->
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -57,17 +75,17 @@
                         <li class="nav-item me-2 mt-1">
                             <button class="btn btn-success" onclick="activarFormulario()">
                                 <!--<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#registroEmpleado">-->
-                                Adcionar Empleado
+                                Adicionar empleado
                             </button>
                         </li>
                         <li class="nav-item me-2 mt-1">
-                            <a class="btn btn-primary" href="{% url 'areas' %}">
+                            <a class="btn btn-primary" href="/rrhh/areas/">
                                 Areas de trabajo
                             </a>
                         </li>
                         <li class="nav-item me-2 mt-1">
-                            <a class="btn btn-primary" href="{% url 'inicio' %}">
-                                Inicio
+                            <a class="btn btn-primary" href="/rrhh/inicio/">
+                                Ver empleados
                             </a>
                         </li>
                     </ul>
@@ -101,13 +119,11 @@
                     <div class="row">
                         <h2>Crear Empleado</h2>
                         <div class="col-md-6 sm-12">
-                            <select class="form-select form-select-lg mb-3" aria-label="Large select"
-                                name="tipo_documento">
-                                <option value="1">CC - Cedula</option>
-                                <option value="2">PS - Pasaporte</option>
-                                <option value="3">CE - Cedula Extranjera</option>
-                                <option value="4">PT - Permiso Temporal</option>
-                                <option value="5">TI - Tarjeta de Identidad</option>
+                            <select class="form-select form-select-lg mb-3" aria-label="Large select" name="tipo_documento" required>
+                                <option value="" selected>Seleccione tipo de documento</option>
+                                {% for documento in documentos %}
+                                <option value="{{documento.id}}">{{documento.abreviatura}} - {{documento.tipo_documento}}</option>
+                                {% endfor %}
                             </select>
                         </div>
                         <div class="col-md-6 sm-12">
@@ -215,3 +231,9 @@
 </body>
 
 </html>
+
+
+
+
+
+

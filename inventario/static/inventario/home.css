@@ -242,3 +242,110 @@ nav ul li a:hover {
 .custom-table td {
     white-space: nowrap;
 }
+.page-actions {
+    margin: 30px 40px 10px;
+}
+
+.page-actions .btn {
+    flex: initial;
+    min-width: 220px;
+}
+
+.inventory-section {
+    margin-top: 18px;
+}
+
+.table-card {
+    text-align: left;
+    overflow: hidden;
+}
+
+.table-card h3 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 18px;
+}
+
+.compact-table {
+    width: 100%;
+    min-width: 760px;
+}
+
+.loans-table {
+    width: 1200px;
+}
+
+.custom-table th,
+.custom-table td {
+    white-space: nowrap;
+}
+
+.custom-table td:nth-child(2),
+.custom-table td:nth-child(3),
+.custom-table td:nth-child(5),
+.custom-table td:nth-child(6) {
+    max-width: 180px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.form-card {
+    max-width: 720px;
+    margin: 35px auto;
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.08);
+}
+
+.form-card h2 {
+    margin-bottom: 22px;
+    color: #333;
+}
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 7px;
+    font-weight: 600;
+    color: #555;
+}
+
+.form-group p {
+    margin: 0;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: inherit;
+}
+
+.form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.form-actions .btn {
+    flex: initial;
+    min-width: 120px;
+}
+
+@media (max-width: 800px) {
+    .main-cards,
+    .actions,
+    .page-actions {
+        margin-left: 20px;
+        margin-right: 20px;
+        flex-direction: column;
+    }
+}

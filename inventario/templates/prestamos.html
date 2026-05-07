@@ -1,0 +1,54 @@
+﻿{% extends "home.html" %}
+
+{% block main %}
+<div class="actions page-actions">
+    <a href="{% url 'inventario:crear_prestamo' %}" class="btn">+ Crear nuevo prestamo</a>
+</div>
+
+<div class="main-cards inventory-section">
+    <div class="card table-card">
+        <h3>Gestion de Prestamos</h3>
+        <div class="table-container">
+            <div class="table-scroll">
+                <table class="custom-table loans-table">
+                    <thead>
+                        <tr>
+                            <th>Fecha prestamo</th>
+                            <th>Devolucion esperada</th>
+                            <th>Fecha devolucion</th>
+                            <th>Estado</th>
+                            <th>Entrega</th>
+                            <th>Devolucion</th>
+                            <th>Item</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for prestamo in prestamos %}
+                        <tr>
+                            <td>{{ prestamo.fecha_prestamo|date:"d/m/Y H:i" }}</td>
+                            <td>{{ prestamo.fecha_devolucion_esperada|date:"d/m/Y" }}</td>
+                            <td>{{ prestamo.fecha_devolucion|default:"Pendiente" }}</td>
+                            <td>{{ prestamo.get_estado_prestamo_display }}</td>
+                            <td>{{ prestamo.observaciones_entrega }}</td>
+                            <td>{{ prestamo.observaciones_devolucion|default:"Sin registrar" }}</td>
+                            <td>{{ prestamo.item.nombre_item }}</td>
+                            <td class="acciones">
+                                <a href="{% url 'inventario:actualizar_prestamo' prestamo.id %}" class="btn small edit">Editar</a>
+                                <a href="{% url 'inventario:eliminar_prestamo' prestamo.id %}" class="btn small delete">Eliminar</a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="8">No hay prestamos registrados</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+

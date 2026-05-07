@@ -1,0 +1,48 @@
+﻿{% extends "home.html" %}
+
+{% block main %}
+<div class="form-card">
+    <h2>{% if prestamo %}Editar prestamo{% else %}Nuevo prestamo{% endif %}</h2>
+    {% if prestamo %}
+        <form method="POST" action="{% url 'inventario:actualizar_prestamo' prestamo.id %}">
+    {% else %}
+        <form method="POST" action="{% url 'inventario:guardar_prestamo' %}">
+    {% endif %}
+        {% csrf_token %}
+        <div class="form-group">
+            <label>Fecha devolucion esperada</label>
+            {{ formulario.fecha_devolucion_esperada }}
+        </div>
+        {% if prestamo %}
+            <div class="form-group">
+                <label>Fecha devolucion</label>
+                {{ formulario.fecha_devolucion }}
+            </div>
+            <div class="form-group">
+                <label>Observaciones devolucion</label>
+                {{ formulario.observaciones_devolucion }}
+            </div>
+        {% endif %}
+        <div class="form-group">
+            <label>Estado prestamo</label>
+            {{ formulario.estado_prestamo }}
+        </div>
+        {% if not prestamo %}
+            <div class="form-group">
+                <label>Observaciones entrega</label>
+                {{ formulario.observaciones_entrega }}
+            </div>
+            <div class="form-group">
+                <label>Item</label>
+                {{ formulario.item }}
+            </div>
+        {% endif %}
+        <div class="form-actions">
+            <button type="submit" class="btn">Guardar</button>
+            <a href="{% url 'inventario:prestamos' %}" class="btn edit">Cancelar</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+

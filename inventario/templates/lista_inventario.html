@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -9,13 +9,13 @@
     <header style="background-color:#3b82f6; padding:15px 40px; color:white; box-shadow:0px 2px 5px rgba(0,0,0,0.2);">
         <div style="display:flex; justify-content:space-between; align-items:center;">
             <h1 style="margin:0; font-size:24px;">
-                Inventario Académico
+                inventario académico
             </h1>
             <nav>
                 <ul style="list-style:none; display:flex; margin:0; padding:0; gap:25px;">
                     <li><a style="color:white; text-decoration:none; font-weight:bold;">Inicio</a></li>
-                    <li><a style="color:white; text-decoration:none;">Inventario</a></li>
-                    <li><a style="color:white; text-decoration:none;">Préstamos</a></li>
+                    <li><a style="color:white; text-decoration:none;">inventario</a></li>
+                    <li><a style="color:white; text-decoration:none;">Prestamos</a></li>
                     <li><a style="color:white; text-decoration:none;">Reportes</a></li>
                     <li><a style="color:white; text-decoration:none;">Usuario</a></li>
                     <li><a style="color:white; text-decoration:none;">Configuración</a></li>
@@ -25,7 +25,7 @@
     </header>
     <main style="padding:40px;">
         <h2 style="margin-bottom:30px; color:#333;">
-            Lista de Inventario
+            Lista de inventario
         </h2>
         <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px,1fr)); gap:20px;">
             {% for item in items %}
@@ -40,7 +40,7 @@
                         {{item.nombre_item}}
                     </h3>
                     <p style="margin:5px 0;">
-                        <strong>Categoría:</strong> {{item.categoria}}
+                        <strong>Categoria:</strong> {{item.categoria}}
                     </p>
                     {% if item.descripcion_item %}
                         <p style="margin:5px 0;">
@@ -65,3 +65,6 @@
     </main>
 </body>
 </html>
+
+
+
