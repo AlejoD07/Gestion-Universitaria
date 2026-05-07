@@ -33,7 +33,7 @@ class Migration(migrations.Migration):
                 ('fecha_compra', models.DateField()),
                 ('valor_item', models.DecimalField(decimal_places=2, default=0, max_digits=10)),
                 ('estado_item', models.CharField(choices=[('1', 'DISPONIBLE'), ('2', 'PRESTADO'), ('3', 'MANTENIMIENTO'), ('4', 'DAÑADO')], default='1', max_length=14)),
-                ('categoria', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='categorias', related_query_name='categoria', to='inventario.categoria')),
+                ('categoria', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='categorias', related_query_name='categoria', to='Inventario.categoria')),
             ],
         ),
         migrations.CreateModel(
@@ -46,7 +46,7 @@ class Migration(migrations.Migration):
                 ('estado_prestamo', models.CharField(choices=[('1', 'PRESTADO'), ('2', 'DEVUELTO'), ('3', 'ATRASADO')], default='1', max_length=9)),
                 ('observaciones_entrega', models.TextField(help_text='El equipo no presenta ningun fallo, rasguño, golpe, etc')),
                 ('observaciones_devolucion', models.TextField(blank=True, help_text='El equipo se devuelve sin ninguna falla, rasguño, golpe, etc', null=True)),
-                ('item', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='items', related_query_name='item', to='inventario.item')),
+                ('item', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='items', related_query_name='item', to='Inventario.item')),
             ],
         ),
     ]
