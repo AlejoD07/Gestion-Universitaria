@@ -1,0 +1,98 @@
+{% extends 'contabilidad/primary-layout.html' %}
+{% block titulo %}Nueva Nómina{% endblock %}
+{% block contenido %}
+
+<h1>Nueva Nómina</h1>
+
+<div class="formulario">
+    <form method="POST">
+        {% csrf_token %}
+
+        <div class="campo">
+            <label>Nombre del empleado</label>
+            <input type="text" name="empleado_nombre" required>
+        </div>
+
+        <div class="campo">
+            <label>Cedula</label>
+            <input type="text" name="empleado_cedula" required>
+        </div>
+
+        <div class="campo">
+            <label>Cargo</label>
+            <input type="text" name="cargo" required>
+        </div>
+
+        <div class="campo">
+            <label>Area</label>
+            <input type="text" name="area" required>
+        </div>
+
+        <div class="campo">
+            <label>Mes</label>
+            <select name="mes" required>
+                <option value="">-- Selecciona --</option>
+                <option value="Enero">Enero</option>
+                <option value="Febrero">Febrero</option>
+                <option value="Marzo">Marzo</option>
+                <option value="Abril">Abril</option>
+                <option value="Mayo">Mayo</option>
+                <option value="Junio">Junio</option>
+                <option value="Julio">Julio</option>
+                <option value="Agosto">Agosto</option>
+                <option value="Septiembre">Septiembre</option>
+                <option value="Octubre">Octubre</option>
+                <option value="Noviembre">Noviembre</option>
+                <option value="Diciembre">Diciembre</option>
+            </select>
+        </div>
+
+        <div class="campo">
+            <label>Año</label>
+            <input type="number" name="anio" value="2025" required>
+        </div>
+
+        <div class="campo">
+            <label>Salario base</label>
+            <input type="number" id="salario_base" name="salario_base" step="0.01" required>
+        </div>
+
+        <div class="campo">
+            <label>Horas extras</label>
+            <input type="number" id="horas_extras" name="horas_extras" step="0.01" value="0">
+        </div>
+
+        <div class="campo">
+            <label>Comisiones</label>
+            <input type="number" id="comisiones" name="comisiones" step="0.01" value="0">
+        </div>
+
+        <div class="campo">
+            <label>Deducciones</label>
+            <input type="number" id="deducciones" name="deducciones" step="0.01" value="0">
+        </div>
+
+        <div class="campo">
+            <label>Total calculado</label>
+            <p id="total_calculado" style="font-size: 18px; font-weight: bold; color: #2980b9;">$ 0</p>
+        </div>
+
+        <div class="campo">
+            <label>Fecha de pago</label>
+            <input type="date" name="fecha_pago" required>
+        </div>
+
+        <div class="campo">
+            <label>Estado</label>
+            <select name="estado">
+                <option value="pendiente">Pendiente</option>
+                <option value="pagado">Pagado</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primario">Guardar</button>
+        <a href="{% url 'lista_nominas' %}" class="btn btn-secundario">Cancelar</a>
+    </form>
+</div>
+
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends 'contabilidad/primary-layout.html' %}
+{% block titulo %}Nóminas{% endblock %}
+{% block contenido %}
+
+<h1>Nominas</h1>
+
+<a href="{% url 'crear_nomina' %}" class="btn btn-primario" style="margin-bottom: 20px; display: inline-block;">+ Nueva Nomina</a>
+
+<table>
+    <thead>
+        <tr>
+            <th>Empleado</th>
+            <th>Cédula</th>
+            <th>Cargo</th>
+            <th>Mes / Año</th>
+            <th>Salario Base</th>
+            <th>Total Pago</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for nomina in nominas %}
+        <tr>
+            <td>{{ nomina.empleado_nombre }}</td>
+            <td>{{ nomina.empleado_cedula }}</td>
+            <td>{{ nomina.cargo }}</td>
+            <td>{{ nomina.mes }} {{ nomina.anio }}</td>
+            <td>$ {{ nomina.salario_base }}</td>
+            <td>$ {{ nomina.total_pago }}</td>
+            <td>
+                <span class="estado-{{ nomina.estado }}">{{ nomina.estado }}</span>
+            </td>
+            <td>
+                <a href="{% url 'editar_nomina' nomina.id %}" class="btn btn-secundario">Editar</a>
+                <a href="{% url 'eliminar_nomina' nomina.id %}" class="btn btn-peligro btn-eliminar">Eliminar</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="8" style="text-align: center; padding: 20px; color: #888;">No hay nóminas registradas.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

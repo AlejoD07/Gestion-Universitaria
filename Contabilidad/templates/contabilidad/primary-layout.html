@@ -1,0 +1,27 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contabilidad - {% block titulo %}{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'contabilidad/CSS/styleContabilidad.css' %}">
+</head>
+<body>
+
+    <nav style="background-color: #2c3e50; padding: 12px 25px; display: flex; gap: 20px; align-items: center;">
+        <span style="color: white; font-weight: bold; font-size: 16px;"> Contabilidad</span>
+        <a href="{% url 'contabilidad_inicio' %}" style="color: #bdc3c7; text-decoration: none; font-size: 14px;">Inicio</a>
+        <a href="{% url 'lista_nominas' %}" style="color: #bdc3c7; text-decoration: none; font-size: 14px;">Nóminas</a>
+        <a href="{% url 'lista_presupuestos' %}" style="color: #bdc3c7; text-decoration: none; font-size: 14px;">Presupuestos</a>
+        <a href="{% url 'lista_ingresos' %}" style="color: #bdc3c7; text-decoration: none; font-size: 14px;">Ingresos</a>
+    </nav>
+
+    <div class="contenedor">
+        {% block contenido %}{% endblock %}
+    </div>
+
+    <script src="{% static 'contabilidad/JS/contabilidad.js' %}"></script>
+
+</body>
+</html>

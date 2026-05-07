@@ -8,4 +8,5 @@ urlpatterns = [
     path('rrhh/', include('RecursosHumanos.urls')),
     path('', include('gestionAcademica.urls')),
     path('academica/', include('gestionAcademica.urls')),
+    path('contabilidad/', include('Contabilidad.urls')),
 ]

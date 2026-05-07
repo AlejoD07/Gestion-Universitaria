@@ -1,0 +1,43 @@
+{% extends 'contabilidad/primary-layout.html' %}
+{% block titulo %}Presupuestos{% endblock %}
+{% block contenido %}
+
+<h1>Presupuestos</h1>
+
+<a href="{% url 'crear_presupuesto' %}" class="btn btn-primario" style="margin-bottom: 20px; display: inline-block;">+ Nuevo Presupuesto</a>
+
+<table>
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Area</th>
+            <th>Mes / Año</th>
+            <th>Monto Asignado</th>
+            <th>Monto Gastado</th>
+            <th>Saldo</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for p in presupuestos %}
+        <tr>
+            <td>{{ p.nombre }}</td>
+            <td>{{ p.area }}</td>
+            <td>{{ p.mes }} {{ p.anio }}</td>
+            <td>$ {{ p.monto_asignado }}</td>
+            <td>$ {{ p.monto_gastado }}</td>
+            <td>$ {{ p.saldo_disponible }}</td>
+            <td>
+                <a href="{% url 'editar_presupuesto' p.id %}" class="btn btn-secundario">Editar</a>
+                <a href="{% url 'eliminar_presupuesto' p.id %}" class="btn btn-peligro btn-eliminar">Eliminar</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="7" style="text-align: center; padding: 20px; color: #888;">No hay presupuestos registrados.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

@@ -1,0 +1,28 @@
+[
+  {
+    "model": "Contabilidad.presupuesto",
+    "pk": 1,
+    "fields": {
+      "nombre": "Presupuesto Nomina Docentes",
+      "area": "Ingenieria",
+      "monto_asignado": "50000000.00",
+      "monto_gastado": "35000000.00",
+      "mes": "Abril",
+      "anio": 2025,
+      "descripcion": "Presupuesto mensual para pago de nómina del área de Ingeniería"
+    }
+  },
+  {
+    "model": "Contabilidad.presupuesto",
+    "pk": 2,
+    "fields": {
+      "nombre": "Presupuesto Administrativo",
+      "area": "Rectoría",
+      "monto_asignado": "20000000.00",
+      "monto_gastado": "12000000.00",
+      "mes": "Abril",
+      "anio": 2025,
+      "descripcion": "Presupuesto para gastos administrativos generales"
+    }
+  }
+]

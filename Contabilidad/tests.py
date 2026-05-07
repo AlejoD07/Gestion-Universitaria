@@ -1,3 +1,3 @@
 from django.test import TestCase
 
-# Create your tests here.
+# Aquí puedes agregar pruebas para el módulo de Contabilidad

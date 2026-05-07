@@ -1,0 +1,40 @@
+[
+  {
+    "model": "Contabilidad.nomina",
+    "pk": 1,
+    "fields": {
+      "empleado_nombre": "Andres Lozada",
+      "empleado_cedula": "10234567",
+      "cargo": "Docente",
+      "area": "Ingenieria",
+      "mes": "Abril",
+      "anio": 2025,
+      "salario_base": "3500000",
+      "horas_extras": "150000",
+      "comisiones": "0",
+      "deducciones": "350000",
+      "total_pago": "3300000",
+      "fecha_pago": "2025-04-30",
+      "estado": "pagado"
+    }
+  },
+  {
+    "model": "Contabilidad.nomina",
+    "pk": 2,
+    "fields": {
+      "empleado_nombre": "Maria Gonzalez",
+      "empleado_cedula": "20345678",
+      "cargo": "Administrativa",
+      "area": "Rectoria",
+      "mes": "Abril",
+      "anio": 2025,
+      "salario_base": "2800000",
+      "horas_extras": "0",
+      "comisiones": "0",
+      "deducciones": "280000",
+      "total_pago": "2520000",
+      "fecha_pago": "2025-04-30",
+      "estado": "pendiente"
+    }
+  }
+]

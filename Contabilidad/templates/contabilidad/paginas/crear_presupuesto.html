@@ -1,0 +1,70 @@
+{% extends 'contabilidad/primary-layout.html' %}
+{% block titulo %}Nuevo Presupuesto{% endblock %}
+{% block contenido %}
+
+<h1>Nuevo Presupuesto</h1>
+
+<div class="formulario">
+    <form method="POST">
+        {% csrf_token %}
+
+        <div class="campo">
+            <label>Nombre del presupuesto</label>
+            <input type="text" name="nombre" required>
+        </div>
+
+        <div class="campo">
+            <label>Area</label>
+            <input type="text" name="area" required>
+        </div>
+
+        <div class="campo">
+            <label>Mes</label>
+            <select name="mes" required>
+                <option value="">-- Selecciona --</option>
+                <option value="Enero">Enero</option>
+                <option value="Febrero">Febrero</option>
+                <option value="Marzo">Marzo</option>
+                <option value="Abril">Abril</option>
+                <option value="Mayo">Mayo</option>
+                <option value="Junio">Junio</option>
+                <option value="Julio">Julio</option>
+                <option value="Agosto">Agosto</option>
+                <option value="Septiembre">Septiembre</option>
+                <option value="Octubre">Octubre</option>
+                <option value="Noviembre">Noviembre</option>
+                <option value="Diciembre">Diciembre</option>
+            </select>
+        </div>
+
+        <div class="campo">
+            <label>Año</label>
+            <input type="number" name="anio" value="2025" required>
+        </div>
+
+        <div class="campo">
+            <label>Monto asignado</label>
+            <input type="number" id="monto_asignado" name="monto_asignado" step="0.01" required>
+        </div>
+
+        <div class="campo">
+            <label>Monto gastado</label>
+            <input type="number" id="monto_gastado" name="monto_gastado" step="0.01" value="0">
+        </div>
+
+        <div class="campo">
+            <label>Saldo disponible</label>
+            <p id="saldo_calculado" style="font-size: 18px; font-weight: bold;">$ 0</p>
+        </div>
+
+        <div class="campo">
+            <label>Descripcion</label>
+            <textarea name="descripcion" rows="3"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primario">Guardar</button>
+        <a href="{% url 'lista_presupuestos' %}" class="btn btn-secundario">Cancelar</a>
+    </form>
+</div>
+
+{% endblock %}

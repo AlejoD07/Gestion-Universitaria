@@ -1,3 +1,6 @@
 from django.contrib import admin
+from .models import Nomina, Presupuesto, Ingreso
 
-# Register your models here.
+admin.site.register(Nomina)
+admin.site.register(Presupuesto)
+admin.site.register(Ingreso)

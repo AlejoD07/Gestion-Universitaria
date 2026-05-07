@@ -1,0 +1,40 @@
+{% extends 'contabilidad/primary-layout.html' %}
+{% block titulo %}Ingresos{% endblock %}
+{% block contenido %}
+
+<h1>Ingresos</h1>
+
+<a href="{% url 'crear_ingreso' %}" class="btn btn-primario" style="margin-bottom: 20px; display: inline-block;">+ Nuevo Ingreso</a>
+
+<table>
+    <thead>
+        <tr>
+            <th>Concepto</th>
+            <th>Fuente</th>
+            <th>Monto</th>
+            <th>Fecha</th>
+            <th>Descripción</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for ingreso in ingresos %}
+        <tr>
+            <td>{{ ingreso.concepto }}</td>
+            <td>{{ ingreso.fuente }}</td>
+            <td>$ {{ ingreso.monto }}</td>
+            <td>{{ ingreso.fecha }}</td>
+            <td>{{ ingreso.descripcion|default:"-" }}</td>
+            <td>
+                <a href="{% url 'eliminar_ingreso' ingreso.id %}" class="btn btn-peligro btn-eliminar">Eliminar</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="6" style="text-align: center; padding: 20px; color: #888;">No hay ingresos registrados.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

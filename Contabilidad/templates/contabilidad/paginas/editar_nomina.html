@@ -1,0 +1,97 @@
+{% extends 'contabilidad/primary-layout.html' %}
+{% block titulo %}Editar Nómina{% endblock %}
+{% block contenido %}
+
+<h1>Editar Nomina</h1>
+
+<div class="formulario">
+    <form method="POST">
+        {% csrf_token %}
+
+        <div class="campo">
+            <label>Nombre del empleado</label>
+            <input type="text" name="empleado_nombre" value="{{ nomina.empleado_nombre }}" required>
+        </div>
+
+        <div class="campo">
+            <label>Cedula</label>
+            <input type="text" name="empleado_cedula" value="{{ nomina.empleado_cedula }}" required>
+        </div>
+
+        <div class="campo">
+            <label>Cargo</label>
+            <input type="text" name="cargo" value="{{ nomina.cargo }}" required>
+        </div>
+
+        <div class="campo">
+            <label>Area</label>
+            <input type="text" name="area" value="{{ nomina.area }}" required>
+        </div>
+
+        <div class="campo">
+            <label>Mes</label>
+            <select name="mes" required>
+                <option value="Enero" {% if nomina.mes == 'Enero' %}selected{% endif %}>Enero</option>
+                <option value="Febrero" {% if nomina.mes == 'Febrero' %}selected{% endif %}>Febrero</option>
+                <option value="Marzo" {% if nomina.mes == 'Marzo' %}selected{% endif %}>Marzo</option>
+                <option value="Abril" {% if nomina.mes == 'Abril' %}selected{% endif %}>Abril</option>
+                <option value="Mayo" {% if nomina.mes == 'Mayo' %}selected{% endif %}>Mayo</option>
+                <option value="Junio" {% if nomina.mes == 'Junio' %}selected{% endif %}>Junio</option>
+                <option value="Julio" {% if nomina.mes == 'Julio' %}selected{% endif %}>Julio</option>
+                <option value="Agosto" {% if nomina.mes == 'Agosto' %}selected{% endif %}>Agosto</option>
+                <option value="Septiembre" {% if nomina.mes == 'Septiembre' %}selected{% endif %}>Septiembre</option>
+                <option value="Octubre" {% if nomina.mes == 'Octubre' %}selected{% endif %}>Octubre</option>
+                <option value="Noviembre" {% if nomina.mes == 'Noviembre' %}selected{% endif %}>Noviembre</option>
+                <option value="Diciembre" {% if nomina.mes == 'Diciembre' %}selected{% endif %}>Diciembre</option>
+            </select>
+        </div>
+
+        <div class="campo">
+            <label>Año</label>
+            <input type="number" name="anio" value="{{ nomina.anio }}" required>
+        </div>
+
+        <div class="campo">
+            <label>Salario base</label>
+            <input type="number" id="salario_base" name="salario_base" value="{{ nomina.salario_base }}" step="0.01" required>
+        </div>
+
+        <div class="campo">
+            <label>Horas extras</label>
+            <input type="number" id="horas_extras" name="horas_extras" value="{{ nomina.horas_extras }}" step="0.01">
+        </div>
+
+        <div class="campo">
+            <label>Comisiones</label>
+            <input type="number" id="comisiones" name="comisiones" value="{{ nomina.comisiones }}" step="0.01">
+        </div>
+
+        <div class="campo">
+            <label>Deducciones</label>
+            <input type="number" id="deducciones" name="deducciones" value="{{ nomina.deducciones }}" step="0.01">
+        </div>
+
+        <div class="campo">
+            <label>Total calculado</label>
+            <p id="total_calculado" style="font-size: 18px; font-weight: bold; color: #2980b9;">$ {{ nomina.total_pago }}</p>
+        </div>
+
+        <div class="campo">
+            <label>Fecha de pago</label>
+            <input type="date" name="fecha_pago" value="{{ nomina.fecha_pago|date:'Y-m-d' }}" required>
+        </div>
+
+        <div class="campo">
+            <label>Estado</label>
+            <select name="estado">
+                <option value="pendiente" {% if nomina.estado == 'pendiente' %}selected{% endif %}>Pendiente</option>
+                <option value="pagado" {% if nomina.estado == 'pagado' %}selected{% endif %}>Pagado</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primario">Actualizar</button>
+        <a href="{% url 'lista_nominas' %}" class="btn btn-secundario">Cancelar</a>
+    </form>
+</div>
+
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends 'contabilidad/primary-layout.html' %}
+{% block titulo %}Nuevo Ingreso{% endblock %}
+{% block contenido %}
+
+<h1>Nuevo Ingreso</h1>
+
+<div class="formulario">
+    <form method="POST">
+        {% csrf_token %}
+
+        <div class="campo">
+            <label>Concepto</label>
+            <input type="text" name="concepto" required>
+        </div>
+
+        <div class="campo">
+            <label>Fuente</label>
+            <input type="text" name="fuente" required>
+        </div>
+
+        <div class="campo">
+            <label>Monto</label>
+            <input type="number" name="monto" step="0.01" required>
+        </div>
+
+        <div class="campo">
+            <label>Fecha</label>
+            <input type="date" name="fecha" required>
+        </div>
+
+        <div class="campo">
+            <label>Descripcion</label>
+            <textarea name="descripcion" rows="3"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primario">Guardar</button>
+        <a href="{% url 'lista_ingresos' %}" class="btn btn-secundario">Cancelar</a>
+    </form>
+</div>
+
+{% endblock %}

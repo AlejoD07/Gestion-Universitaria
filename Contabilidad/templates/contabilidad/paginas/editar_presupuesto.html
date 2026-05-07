@@ -1,0 +1,69 @@
+{% extends 'contabilidad/primary-layout.html' %}
+{% block titulo %}Editar Presupuesto{% endblock %}
+{% block contenido %}
+
+<h1>Editar Presupuesto</h1>
+
+<div class="formulario">
+    <form method="POST">
+        {% csrf_token %}
+
+        <div class="campo">
+            <label>Nombre del presupuesto</label>
+            <input type="text" name="nombre" value="{{ presupuesto.nombre }}" required>
+        </div>
+
+        <div class="campo">
+            <label>Area</label>
+            <input type="text" name="area" value="{{ presupuesto.area }}" required>
+        </div>
+
+        <div class="campo">
+            <label>Mes</label>
+            <select name="mes" required>
+                <option value="Enero" {% if presupuesto.mes == 'Enero' %}selected{% endif %}>Enero</option>
+                <option value="Febrero" {% if presupuesto.mes == 'Febrero' %}selected{% endif %}>Febrero</option>
+                <option value="Marzo" {% if presupuesto.mes == 'Marzo' %}selected{% endif %}>Marzo</option>
+                <option value="Abril" {% if presupuesto.mes == 'Abril' %}selected{% endif %}>Abril</option>
+                <option value="Mayo" {% if presupuesto.mes == 'Mayo' %}selected{% endif %}>Mayo</option>
+                <option value="Junio" {% if presupuesto.mes == 'Junio' %}selected{% endif %}>Junio</option>
+                <option value="Julio" {% if presupuesto.mes == 'Julio' %}selected{% endif %}>Julio</option>
+                <option value="Agosto" {% if presupuesto.mes == 'Agosto' %}selected{% endif %}>Agosto</option>
+                <option value="Septiembre" {% if presupuesto.mes == 'Septiembre' %}selected{% endif %}>Septiembre</option>
+                <option value="Octubre" {% if presupuesto.mes == 'Octubre' %}selected{% endif %}>Octubre</option>
+                <option value="Noviembre" {% if presupuesto.mes == 'Noviembre' %}selected{% endif %}>Noviembre</option>
+                <option value="Diciembre" {% if presupuesto.mes == 'Diciembre' %}selected{% endif %}>Diciembre</option>
+            </select>
+        </div>
+
+        <div class="campo">
+            <label>Año</label>
+            <input type="number" name="anio" value="{{ presupuesto.anio }}" required>
+        </div>
+
+        <div class="campo">
+            <label>Monto asignado</label>
+            <input type="number" id="monto_asignado" name="monto_asignado" value="{{ presupuesto.monto_asignado }}" step="0.01" required>
+        </div>
+
+        <div class="campo">
+            <label>Monto gastado</label>
+            <input type="number" id="monto_gastado" name="monto_gastado" value="{{ presupuesto.monto_gastado }}" step="0.01">
+        </div>
+
+        <div class="campo">
+            <label>Saldo disponible</label>
+            <p id="saldo_calculado" style="font-size: 18px; font-weight: bold;">$ {{ presupuesto.saldo_disponible }}</p>
+        </div>
+
+        <div class="campo">
+            <label>Descripcion</label>
+            <textarea name="descripcion" rows="3">{{ presupuesto.descripcion }}</textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primario">Actualizar</button>
+        <a href="{% url 'lista_presupuestos' %}" class="btn btn-secundario">Cancelar</a>
+    </form>
+</div>
+
+{% endblock %}

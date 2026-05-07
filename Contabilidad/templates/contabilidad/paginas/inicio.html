@@ -1,0 +1,27 @@
+{% extends 'contabilidad/primary-layout.html' %}
+{% block titulo %}Inicio{% endblock %}
+{% block contenido %}
+
+<h1>Panel de Contabilidad</h1>
+
+<div class="resumen">
+    <div class="tarjeta">
+        <div class="numero">{{ total_nominas }}</div>
+        <div class="etiqueta">Nominas registradas</div>
+    </div>
+    <div class="tarjeta">
+        <div class="numero">{{ total_presupuestos }}</div>
+        <div class="etiqueta">Presupuestos activos</div>
+    </div>
+    <div class="tarjeta">
+        <div class="numero">{{ total_ingresos }}</div>
+        <div class="etiqueta">Ingresos registrados</div>
+    </div>
+</div>
+
+<h2>Accesos rápidos</h2>
+<a href="{% url 'lista_nominas' %}" class="btn btn-primario">Ver Nominas</a>
+<a href="{% url 'lista_presupuestos' %}" class="btn btn-primario">Ver Presupuestos</a>
+<a href="{% url 'lista_ingresos' %}" class="btn btn-primario">Ver Ingresos</a>
+
+{% endblock %}
