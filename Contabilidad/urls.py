@@ -1,4 +1,4 @@
-from django.urls import path
+﻿from django.urls import path
 from . import views
 
 urlpatterns = [
@@ -22,4 +22,10 @@ urlpatterns = [
     path('ingresos/', views.lista_ingresos, name='lista_ingresos'),
     path('ingresos/crear/', views.crear_ingreso, name='crear_ingreso'),
     path('ingresos/eliminar/<int:id>/', views.eliminar_ingreso, name='eliminar_ingreso'),
+
+    path('areas-contables/', views.lista_areas_contables, name='lista_areas_contables'),
+    path('areas-contables/crear/', views.crear_area_contable, name='crear_area_contable'),
+    path('areas-contables/estado/<int:id>/', views.cambiar_estado_area_contable, name='cambiar_estado_area_contable'),
 ]
+
+

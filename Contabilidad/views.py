@@ -1,5 +1,5 @@
-from django.shortcuts import render, get_object_or_404, redirect
-from .models import Nomina, Presupuesto, Ingreso
+﻿from django.shortcuts import render, get_object_or_404, redirect
+from .models import AreaContable, Nomina, Presupuesto, Ingreso
 
 
 # ---------- INICIO ----------
@@ -95,7 +95,7 @@ def crear_presupuesto(request):
         presupuesto.save()
         return redirect('lista_presupuestos')
 
-    return render(request, 'contabilidad/paginas/crear_presupuesto.html')
+    return render(request, 'contabilidad/paginas/crear_presupuesto.html', {'areas': AreaContable.objects.filter(activa=True)})
 
 
 def editar_presupuesto(request, id):
@@ -112,7 +112,7 @@ def editar_presupuesto(request, id):
         presupuesto.save()
         return redirect('lista_presupuestos')
 
-    return render(request, 'contabilidad/paginas/editar_presupuesto.html', {'presupuesto': presupuesto})
+    return render(request, 'contabilidad/paginas/editar_presupuesto.html', {'presupuesto': presupuesto, 'areas': AreaContable.objects.filter(activa=True)})
 
 
 def eliminar_presupuesto(request, id):
@@ -146,3 +146,27 @@ def eliminar_ingreso(request, id):
     ingreso = get_object_or_404(Ingreso, id=id)
     ingreso.delete()
     return redirect('lista_ingresos')
+
+
+
+# ---------- AREAS CONTABLES ----------
+
+def lista_areas_contables(request):
+    areas = AreaContable.objects.all().order_by('nombre')
+    return render(request, 'contabilidad/paginas/areas_contables.html', {'areas': areas})
+
+
+def crear_area_contable(request):
+    if request.method == 'POST':
+        nombre = request.POST.get('nombre')
+        if nombre:
+            AreaContable.objects.get_or_create(nombre=nombre, defaults={'activa': request.POST.get('activa') == 'on'})
+        return redirect('lista_areas_contables')
+    return redirect('lista_areas_contables')
+
+
+def cambiar_estado_area_contable(request, id):
+    area = get_object_or_404(AreaContable, id=id)
+    area.activa = not area.activa
+    area.save()
+    return redirect('lista_areas_contables')

@@ -21,11 +21,11 @@
             <h1 style="font-size: 24px; font-weight: bold; margin: 0; color: #333;">Recursos Humanos</h1>
             <nav>
                 <ul style="list-style: none; display: flex; gap: 22px; flex-wrap: wrap; margin: 0; padding: 0;">
-                    <li><a style="text-decoration: none; color: #333; font-weight: 500;" href="{% url 'rrhh:inventario:home' %}">inventario</a></li>
-                    <li><a style="text-decoration: none; color: #333; font-weight: 500;" href="{% url 'rrhh:academica_inicio' %}">Gestión Académica</a></li>
-                    <li><a style="text-decoration: none; color: #333; font-weight: 500;" href="{% url 'rrhh:contabilidad_inicio' %}">Contabilidad</a></li>
-                    <li><a style="text-decoration: none; color: #ff5a2c; font-weight: 700;" href="/rrhh/home/">Recursos Humanos</a></li>
-                    <li><a style="text-decoration: none; color: #333; font-weight: 500;" href="{% url 'rrhh:solicitudes:home' %}">Solicitudes</a></li>
+                    <li><a style="text-decoration: none; color: #333; font-weight: 500;" href="{% url 'inventario:home' %}">inventario</a></li>
+                    <li><a style="text-decoration: none; color: #333; font-weight: 500;" href="{% url 'academica_inicio' %}">Gestión Académica</a></li>
+                    <li><a style="text-decoration: none; color: #333; font-weight: 500;" href="{% url 'contabilidad_inicio' %}">Contabilidad</a></li>
+                    <li><a style="text-decoration: none; color: #ff5a2c; font-weight: 700;" href="/rrhh/inicio/">Recursos Humanos</a></li>
+                    <li><a style="text-decoration: none; color: #333; font-weight: 500;" href="{% url 'solicitudes:home' %}">Solicitudes</a></li>
                 </ul>
             </nav>
         </div>
@@ -44,7 +44,7 @@
                     </a>
                     <ul class="nav justify-content-end">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="/rrhh/home/">Exit
+                            <a class="nav-link active" aria-current="page" href="/rrhh/inicio/">Exit
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                     class="bi bi-box-arrow-right" viewBox="0 0 16 16">
                                     <path fill-rule="evenodd"
@@ -231,6 +231,9 @@
 </body>
 
 </html>
+
+
+
 
 
 

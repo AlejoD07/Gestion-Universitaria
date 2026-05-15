@@ -1,4 +1,4 @@
-{% load static %}
+﻿{% load static %}
 
 <!DOCTYPE html>
 <html>
@@ -11,7 +11,7 @@
         <div style="background-color: #3a4857; color: white; padding: 15px; display: flex; justify-content: space-between;">
             <div>
                 <h2 style="margin:0;">Sistema Universitario</h2>
-                <p style="margin:0;">Módulo de Gestión de Quejas</p>
+                <p style="margin:0;">Módulo de Gestión de Solicitudes</p>
             </div>
             <div style="padding: 14px;">
                 <a style="color: white; margin-right: 15px;">Mis Quejas</a>
@@ -22,7 +22,7 @@
         <div style="padding:20px; display: flex; justify-content: space-between;">
             <h2>Historial de Queja ID: {{ id }}</h2>
 
-            <a href="{% url 'solicitudes:ejemplo_for' id=id %}" style="padding: 17px 10px; border: 1px solid; border-radius: 8px; background: rgb(249, 133, 74); color: white; text-decoration: none;">Volver</a>
+            <a href="{% url 'solicitudes:home' %}" style="padding: 17px 10px; border: 1px solid; border-radius: 8px; background: rgb(249, 133, 74); color: white; text-decoration: none;">Volver</a>
         </div>
 
         <div style="padding:20px;">
@@ -53,5 +53,17 @@
                 {% endif %}
             </table>
         </div>
-    </body>
+    
+    {% if documentos %}
+        <section class="detalle-card">
+            <h2>Documentos adjuntos</h2>
+            <ul>
+                {% for documento in documentos %}
+                    <li><a href="{{ documento.archivo.url }}" target="_blank">{{ documento.nombre_original }}</a></li>
+                {% endfor %}
+            </ul>
+        </section>
+    {% endif %}
+</body>
 </html>
+

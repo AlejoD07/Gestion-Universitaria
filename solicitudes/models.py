@@ -1,4 +1,4 @@
-from django.db import models
+﻿from django.db import models
 
 # Create your models here.
 class Rol(models.Model):
@@ -69,3 +69,11 @@ class ComentariosSolicitud(models.Model):
 
     def __str__(self):
         return f"Comentario {self.id} - {self.solicitud}"
+class DocumentoSolicitud(models.Model):
+    solicitud = models.ForeignKey(Solicitud, on_delete=models.CASCADE, related_name='documentos')
+    archivo = models.FileField(upload_to='solicitudes/documentos/')
+    nombre_original = models.CharField(max_length=255, blank=True)
+    fecha_carga = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.nombre_original or str(self.archivo)

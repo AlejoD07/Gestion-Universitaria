@@ -19,10 +19,11 @@
         <h1>inventario académico</h1>
         <nav>
             <ul>
+                    <li><a href="{% url 'home_general' %}">Inicio general</a></li>
                 <li><a href="{% url 'inventario:home' %}">inventario</a></li>
                 <li><a href="{% url 'academica_inicio' %}">Gestión Académica</a></li>
                 <li><a href="{% url 'contabilidad_inicio' %}">Contabilidad</a></li>
-                <li><a href="{% url 'rrhh:home' %}">Recursos Humanos</a></li>
+                <li><a href="/rrhh/inicio/">Recursos Humanos</a></li>
                 <li><a href="{% url 'solicitudes:home' %}">Solicitudes</a></li>
             </ul>
         </nav>
@@ -46,6 +47,8 @@
 
 </body>
 </html>
+
+
 
 
 

@@ -1,10 +1,10 @@
-{% extends 'gestionAcademica/primary-layout.html' %}
+﻿{% extends 'gestionAcademica/primary-layout.html' %}
 {% block titulo %}{{ titulo }}{% endblock %}
 {% block contenido %}
 
 <h1>{{ titulo }}</h1>
 
-<a href="{% url crear_url %}" class="btn btn-primario" style="margin-bottom: 20px; display: inline-block;">+ Nuevo Registro</a>
+{% if crear_url %}<a href="{% url crear_url %}" class="btn btn-primario" style="margin-bottom: 20px; display: inline-block;">+ Nuevo Registro</a>{% endif %}
 
 <table>
     <thead>
@@ -24,8 +24,12 @@
                 {% endfor %}
                 <td>
                     {% with registro_id=fila|last %}
-                        <a href="{% url editar_url registro_id %}" class="btn btn-secundario">Editar</a>
-                        <a href="{% url eliminar_url registro_id %}" class="btn btn-peligro btn-eliminar">Eliminar</a>
+                        {% if puede_editar|default:True %}
+                            <a href="{% url editar_url registro_id %}" class="btn btn-secundario">Editar</a>
+                            <a href="{% url eliminar_url registro_id %}" class="btn btn-peligro btn-eliminar">Eliminar</a>
+                        {% else %}
+                            <span style="color:#667085;">Solo lectura</span>
+                        {% endif %}
                     {% endwith %}
                 </td>
             </tr>
@@ -38,3 +42,6 @@
 </table>
 
 {% endblock %}
+
+
+

@@ -1,4 +1,5 @@
-from django.shortcuts import render, redirect, get_object_or_404
+﻿from django.shortcuts import render, redirect, get_object_or_404
+from gestionUniversitaria.access import usuario_actual
 from django.core.exceptions import ObjectDoesNotExist
 
 from .forms.formulario_quejas import FormularioQuejas
@@ -15,7 +16,22 @@ def _tipo_por_slug(tipo):
     return get_object_or_404(models.TiposSolicitud, nombre__iexact=nombre)
 
 
-def _usuario_demo():
+def _usuario_demo(request=None):
+    usuario_central = usuario_actual(request) if request else None
+    if usuario_central:
+        rol, _ = models.Rol.objects.get_or_create(nombre_rol=usuario_central.id_rol.nombre_rol)
+        tipo_doc, _ = models.TipoDocumento.objects.get_or_create(nombre_tipo_doc=str(usuario_central.id_tipo_documento))
+        usuario, _ = models.Usuario.objects.get_or_create(
+            email=f'{usuario_central.id_usuario}@universidad.local',
+            defaults={
+                'nombre_usuario': usuario_central.nombre_usuario,
+                'activo': usuario_central.activo,
+                'id_tipo_documento': tipo_doc,
+                'id_rol': rol,
+            },
+        )
+        return usuario
+
     rol, _ = models.Rol.objects.get_or_create(nombre_rol='Estudiante')
     tipo_doc, _ = models.TipoDocumento.objects.get_or_create(nombre_tipo_doc='Cedula')
     usuario, _ = models.Usuario.objects.get_or_create(
@@ -79,7 +95,7 @@ def view_form_quejas(request, tipo=None):
     tipo_solicitud = _tipo_por_slug(tipo) if tipo else None
 
     if request.method == "GET":
-        usuario = _usuario_demo()
+        usuario = _usuario_demo(request)
         request.session['usuario_id'] = usuario.id
         return render(request, 'solicitudes/formulario_quejas.html', {
             'formulario_quejas': FormularioQuejas,
@@ -87,7 +103,7 @@ def view_form_quejas(request, tipo=None):
             'tipo_solicitud': tipo_solicitud,
         })
 
-    id_usuario = request.session.get('usuario_id') or _usuario_demo().id
+    id_usuario = request.session.get('usuario_id') or _usuario_demo(request).id
     tipo_id = request.POST['tipos']
     prioridad = request.POST['prioridad']
     observaciones = request.POST['observaciones']
@@ -113,6 +129,13 @@ def view_form_quejas(request, tipo=None):
             comentario=observaciones,
         )
 
+        for archivo in request.FILES.getlist('documentos'):
+            models.DocumentoSolicitud.objects.create(
+                solicitud=nueva_solicitud,
+                archivo=archivo,
+                nombre_original=archivo.name,
+            )
+
         return redirect('solicitudes:detalle_solicitud', id=nueva_solicitud.id)
     except Exception as e:
         print("Error al crear la solicitud:", e)
@@ -127,7 +150,10 @@ def view_form_quejas(request, tipo=None):
 def detalle_solicitud(request, id):
     try:
         solicitudes = models.HistorialSolicitud.objects.filter(solicitud_id=id).order_by('-fecha')
-        return render(request, 'solicitudes/detalle_solicitud.html', {'solicitudes': solicitudes, 'status': 200, 'id': id})
+        documentos = models.DocumentoSolicitud.objects.filter(solicitud_id=id)
+        return render(request, 'solicitudes/detalle_solicitud.html', {'solicitudes': solicitudes, 'documentos': documentos, 'status': 200, 'id': id})
     except ObjectDoesNotExist:
         print("La solicitud con id", id, "no existe.")
         return render(request, 'solicitudes/detalle_solicitud.html', {'solicitud': None, 'status': 404})
+
+

@@ -1,4 +1,4 @@
-{% load static %}
+﻿{% load static %}
 
 <html lang="es">
 <head>
@@ -19,7 +19,7 @@
             <h1 class="titulo">Nueva {{ tipo_solicitud.nombre|default:"solicitud" }}</h1>
             <p class="subtitulo">Completa la informacion para registrar tu solicitud.</p>
 
-            <form method="post">
+            <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
 
                 <div class="grupo-campo">
@@ -44,7 +44,13 @@
 
                 <div class="grupo-campo">
                     <label for="id_observaciones">Observaciones</label>
-                    <textarea name="observaciones" id="id_observaciones" placeholder="Escribe tu observacion aqui..." required></textarea>
+                    <textarea name="observaciones" id="id_observaciones" placeholder="Escribe tu observación aquí..." required></textarea>
+                </div>
+
+                <div class="grupo-campo">
+                    <label for="id_documentos">Documentos de soporte</label>
+                    <input type="file" name="documentos" id="id_documentos" multiple>
+                    <small>Puedes adjuntar certificados, soportes o evidencias en PDF o imagen.</small>
                 </div>
 
                 <button type="submit" class="boton-enviar">Enviar</button>
@@ -62,3 +68,4 @@
 
 </body>
 </html>
+

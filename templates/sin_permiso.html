@@ -1,0 +1,22 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sin permiso</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #f4f6f9; min-height: 100vh; display: grid; place-items: center; margin: 0; color: #20242a; }
+        .card { background: white; padding: 36px; border-radius: 12px; max-width: 520px; box-shadow: 0 12px 30px rgba(0,0,0,.1); text-align: center; }
+        h1 { margin-bottom: 12px; }
+        p { color: #667085; line-height: 1.5; }
+        a { display: inline-block; margin-top: 20px; background: #ff5a2c; color: white; text-decoration: none; padding: 12px 18px; border-radius: 8px; font-weight: 700; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>Acceso no autorizado</h1>
+        <p>Tu rol actual no tiene permiso para entrar a este módulo. Ingresa con un usuario autorizado o vuelve al panel principal.</p>
+        <a href="{% url 'home_general' %}">Volver al panel</a>
+    </div>
+</body>
+</html>

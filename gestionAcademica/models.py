@@ -1,6 +1,14 @@
-from django.db import models
+﻿from django.db import models
 
 # Create your models here.
+
+class Facultad(models.Model):
+    nombre = models.CharField(max_length=100, unique=True)
+    activa = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.nombre
+
 
 class Rol(models.Model):
     id_rol = models.BigIntegerField(unique=True, db_index=True, primary_key=True)
@@ -29,6 +37,12 @@ class Usuario(models.Model):
         Rol,
         on_delete=models.PROTECT
     )
+    facultad = models.ForeignKey(
+        Facultad,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
+    )
     
     def __str__(self):
         return f"{self.nombre_usuario}"
@@ -47,6 +61,12 @@ class Estudiante(models.Model):
     
 class Programa(models.Model):
     nombre = models.CharField(max_length=100)
+    facultad = models.ForeignKey(
+        Facultad,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
+    )
     
     def __str__(self):
         return self.nombre
@@ -60,6 +80,13 @@ class Materia(models.Model):
     programa = models.ForeignKey(
         Programa,
         on_delete=models.PROTECT
+    )
+    profesor = models.ForeignKey(
+        Usuario,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='materias_asignadas'
     )
     
     def __str__(self):

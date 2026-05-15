@@ -1,0 +1,43 @@
+﻿{% extends 'contabilidad/primary-layout.html' %}
+{% block titulo %}Áreas contables{% endblock %}
+{% block contenido %}
+
+<h1>Áreas del organigrama</h1>
+<p style="color:#667085; margin-bottom:20px;">Estas áreas alimentan la selección de presupuestos y evitan capturas libres o inconsistentes.</p>
+
+<div class="formulario" style="margin-bottom:24px;">
+    <form method="POST" action="{% url 'crear_area_contable' %}">
+        {% csrf_token %}
+        <div class="campo">
+            <label>Nueva área</label>
+            <input type="text" name="nombre" required>
+        </div>
+        <div class="campo">
+            <label><input type="checkbox" name="activa" checked> Activa</label>
+        </div>
+        <button class="btn btn-primario" type="submit">Agregar área</button>
+    </form>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>Área</th>
+            <th>Estado</th>
+            <th>Acción</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for area in areas %}
+            <tr>
+                <td>{{ area.nombre }}</td>
+                <td>{% if area.activa %}Activa{% else %}Inactiva{% endif %}</td>
+                <td><a class="btn btn-secundario" href="{% url 'cambiar_estado_area_contable' area.id %}">Cambiar estado</a></td>
+            </tr>
+        {% empty %}
+            <tr><td colspan="3">No hay áreas registradas.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

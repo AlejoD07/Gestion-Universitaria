@@ -17,10 +17,11 @@
             <h1>Contabilidad</h1>
             <nav class="menu-global">
                 <ul>
+                    <li><a href="{% url 'home_general' %}">Inicio general</a></li>
                     <li><a href="{% url 'inventario:home' %}">inventario</a></li>
                     <li><a href="{% url 'academica_inicio' %}">Gestión Académica</a></li>
                     <li><a href="{% url 'contabilidad_inicio' %}">Contabilidad</a></li>
-                    <li><a href="{% url 'rrhh:home' %}">Recursos Humanos</a></li>
+                    <li><a href="/rrhh/inicio/">Recursos Humanos</a></li>
                     <li><a href="{% url 'solicitudes:home' %}">Solicitudes</a></li>
                 </ul>
             </nav>
@@ -32,6 +33,7 @@
         <a href="{% url 'lista_nominas' %}">Nominas</a>
         <a href="{% url 'lista_presupuestos' %}">Presupuestos</a>
         <a href="{% url 'lista_ingresos' %}">Ingresos</a>
+        <a href="{% url 'lista_areas_contables' %}">Áreas</a>
     </nav>
 
     <div class="contenedor">
@@ -41,5 +43,8 @@
     <script src="{% static 'contabilidad/JS/contabilidad.js' %}"></script>
 </body>
 </html>
+
+
+
 
 

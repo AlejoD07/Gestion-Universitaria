@@ -14,8 +14,12 @@
         </div>
 
         <div class="campo">
-            <label>Area</label>
-            <input type="text" name="area" value="{{ presupuesto.area }}" required>
+            <label>Área del organigrama</label>
+            <select name="area" required>
+                {% for area in areas %}
+                    <option value="{{ area.nombre }}" {% if presupuesto.area == area.nombre %}selected{% endif %}>{{ area.nombre }}</option>
+                {% endfor %}
+            </select>
         </div>
 
         <div class="campo">
@@ -67,5 +71,7 @@
 </div>
 
 {% endblock %}
+
+
 
 
