@@ -2,6 +2,10 @@ services:
   - type: web
     name: gestion-universitaria
     runtime: docker
+    repo: https://github.com/AlejoD07/Gestion-Universitaria
+    branch: version-2.0
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
     plan: free
     autoDeploy: true
     envVars:
