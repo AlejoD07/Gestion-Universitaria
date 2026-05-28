@@ -41,6 +41,28 @@ Abrir:
 http://127.0.0.1:8000/
 ```
 
+## Despliegue en Render con Docker
+
+El proyecto incluye `Dockerfile`, `.dockerignore` y `render.yaml` para crear un Web Service en Render usando Docker.
+
+Pasos:
+
+```bash
+git add .
+git add -f db.sqlite3
+git commit -m "Preparar despliegue en Render con Docker"
+git push
+```
+
+Luego en Render:
+
+1. Crear un nuevo Blueprint o Web Service desde el repositorio.
+2. Seleccionar Docker como runtime si se crea manualmente.
+3. Usar el plan Free para demo.
+4. Desplegar.
+
+Importante: `db.sqlite3` normalmente no se versiona, pero para esta demo contiene los usuarios y datos de prueba. Si no se sube con `git add -f db.sqlite3`, Render ejecutara las migraciones sobre una base vacia y las credenciales demo no funcionaran.
+
 ## Integrantes
 
 - Alejandro Díaz.
