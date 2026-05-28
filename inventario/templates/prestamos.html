@@ -1,8 +1,8 @@
-﻿{% extends "home.html" %}
+{% extends "home.html" %}
 
 {% block main %}
 <div class="actions page-actions">
-    <a href="{% url 'inventario:crear_prestamo' %}" class="btn">+ Crear nuevo prestamo</a>
+    <a href="{% url 'inventario:crear_prestamo' %}" class="btn btn-auto">+ Crear nuevo prestamo</a>
 </div>
 
 <div class="main-cards inventory-section">
@@ -34,7 +34,7 @@
                             <td>{{ prestamo.observaciones_devolucion|default:"Sin registrar" }}</td>
                             <td>{{ prestamo.item.nombre_item }}</td>
                             <td class="acciones">
-                                <a href="{% url 'inventario:actualizar_prestamo' prestamo.id %}" class="btn small edit">Editar</a>
+                                {% if prestamo.estado_prestamo != "2" %}<a href="{% url 'inventario:actualizar_prestamo' prestamo.id %}" class="btn small edit">Editar</a>{% endif %}
                                 <a href="{% url 'inventario:eliminar_prestamo' prestamo.id %}" class="btn small delete">Eliminar</a>
                             </td>
                         </tr>
@@ -50,5 +50,3 @@
     </div>
 </div>
 {% endblock %}
-
-

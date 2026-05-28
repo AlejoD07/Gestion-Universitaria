@@ -1,4 +1,4 @@
-* {
+﻿* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -256,4 +256,37 @@ tbody td {
     padding: 3px 8px;
     border-radius: 5px;
     font-size: 12px;
+}
+
+.grupo-busqueda {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 10px;
+    align-items: center;
+}
+
+.grupo-busqueda .btn {
+    height: 38px;
+    white-space: nowrap;
+}
+
+.mensaje-ayuda {
+    display: block;
+    margin-top: 6px;
+    color: #666;
+}
+
+.alerta-error {
+    background: #fff3f0;
+    border: 1px solid #ffb29d;
+    border-left: 4px solid #ff5a2c;
+    color: #8a2f17;
+    padding: 12px 14px;
+    border-radius: 6px;
+    margin-bottom: 18px;
+}
+
+.campo input[readonly] {
+    background-color: #f7f7f7;
+    color: #555;
 }

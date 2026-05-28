@@ -1,0 +1,231 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Gestión de Calificaciones - Profesor{% endblock %}
+
+{% block extra_css %}
+<style>
+    .materia-card {
+        background: white;
+        border-radius: 12px;
+        border-left: 5px solid #ff5a2c;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        transition: all 0.3s ease;
+    }
+
+    .materia-card:hover {
+        box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        transform: translateY(-2px);
+    }
+
+    .materia-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+        margin-bottom: 1rem;
+    }
+
+    .materia-title {
+        flex: 1;
+    }
+
+    .materia-title h3 {
+        color: #1f2937;
+        margin-bottom: 0.25rem;
+        font-weight: 700;
+    }
+
+    .materia-info {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        margin-top: 0.75rem;
+    }
+
+    .info-badge {
+        background: #f3f4f6;
+        padding: 0.5rem 0.75rem;
+        border-radius: 6px;
+        font-size: 0.85rem;
+        color: #6b7280;
+    }
+
+    .info-badge strong {
+        color: #1f2937;
+    }
+
+    .materia-actions {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: 1rem;
+    }
+
+    .btn-sm {
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .stat-item {
+        background: #f9fafb;
+        padding: 0.75rem;
+        border-radius: 8px;
+        text-align: center;
+    }
+
+    .stat-number {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #ff5a2c;
+    }
+
+    .stat-label {
+        font-size: 0.75rem;
+        color: #6b7280;
+        text-transform: uppercase;
+    }
+
+    .hero {
+        background: linear-gradient(135deg, #ff5a2c, #ff7a50);
+        color: white;
+        padding: 3rem 2rem;
+        border-radius: 12px;
+        margin-bottom: 2rem;
+    }
+
+    .hero h1 {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+
+    .hero p {
+        opacity: 0.95;
+        margin-bottom: 0;
+    }
+</style>
+{% endblock %}
+
+{% block contenido %}
+<div class="container">
+    <!-- Hero Section -->
+    <div class="hero">
+        <h1><i class="fas fa-chalkboard-user"></i> Gestión de Calificaciones</h1>
+        <p>Crea actividades, asigna porcentajes y califica a tus estudiantes. El sistema calcula automáticamente las notas finales.</p>
+    </div>
+
+    <!-- Alert de bienvenida -->
+    <div class="alert alert-info" role="alert">
+        <i class="fas fa-info-circle"></i>
+        <strong>Bienvenido, {{ user.username }}</strong><br>
+        Tienes <strong>{{ total_materias }}</strong> materia{{ total_materias|pluralize }} asignada{{ total_materias|pluralize }}.
+        Selecciona una para empezar a crear actividades.
+    </div>
+
+    <!-- Materias -->
+    <h2 class="mb-4"><i class="fas fa-book"></i> Mis Materias</h2>
+
+    {% if materias %}
+        {% for materia in materias %}
+        <div class="materia-card">
+            <div class="materia-header">
+                <div class="materia-title">
+                    <h3>{{ materia.nombre }}</h3>
+                    <small class="text-muted">
+                        <i class="fas fa-graduation-cap"></i>
+                        {{ materia.programa.nombre }}
+                        <span class="badge bg-secondary ms-2">{{ materia.creditos }} créditos</span>
+                    </small>
+                </div>
+            </div>
+
+            {% if materia.descripcion %}
+            <p class="text-muted mb-2">{{ materia.descripcion }}</p>
+            {% endif %}
+
+            <div class="materia-info">
+                <div class="info-badge">
+                    <strong>{{ materia.inscripcion_set.count }}</strong> Estudiantes inscritos
+                </div>
+                <div class="info-badge">
+                    <strong>{{ materia.actividades.count }}</strong> Actividades creadas
+                </div>
+            </div>
+
+            <!-- Estadísticas por período -->
+            {% if materia.actividades.count > 0 %}
+            <div class="stats-grid">
+                {% regroup materia.actividades.all by periodo as actividades_por_periodo %}
+                {% for periodo_group in actividades_por_periodo %}
+                <div class="stat-item">
+                    <div class="stat-number">{{ periodo_group.list|length }}</div>
+                    <div class="stat-label">Actividades<br>{{ periodo_group.grouper }}</div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <!-- Botones de acción -->
+            <div class="materia-actions">
+                <a href="/academica/profesor/actividades/{{ materia.pk }}/"
+                   class="btn btn-sm btn-outline-primary">
+                    <i class="fas fa-list"></i> Ver Actividades
+                </a>
+                <a href="/academica/profesor/actividad/crear/{{ materia.pk }}/"
+                   class="btn btn-sm btn-primary">
+                    <i class="fas fa-plus"></i> Nueva Actividad
+                </a>
+                <a href="/academica/profesor/definitivas/{{ materia.pk }}/"
+                   class="btn btn-sm btn-success">
+                    <i class="fas fa-clipboard-check"></i> Definitivas
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="alert alert-warning">
+            <i class="fas fa-exclamation-triangle"></i>
+            No tienes materias asignadas en este período.
+        </div>
+    {% endif %}
+
+    <!-- Información de Ayuda -->
+    <div class="row mt-5 mb-4">
+        <div class="col-md-6">
+            <div class="card border-0 bg-light">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-lightbulb"></i> Cómo funciona</h5>
+                    <ol class="small">
+                        <li>Selecciona una materia</li>
+                        <li>Crea actividades (Quiz, Taller, Examen, etc.)</li>
+                        <li>Asigna un porcentaje a cada actividad (total 100%)</li>
+                        <li>Califica a cada estudiante en cada actividad</li>
+                        <li>El sistema calcula automáticamente la nota final</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card border-0 bg-light">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-calculator"></i> Ejemplo de Cálculo</h5>
+                    <small>
+                        <strong>Quiz 1 (15%):</strong> 4.5 -> 0.675<br>
+                        <strong>Taller (20%):</strong> 4.0 -> 0.800<br>
+                        <strong>Parcial (35%):</strong> 3.8 -> 1.330<br>
+                        <strong>Proyecto (30%):</strong> 4.2 -> 1.260<br>
+                        <strong>Total: 4.065</strong>
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

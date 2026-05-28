@@ -1,4 +1,4 @@
-﻿{% extends "home.html" %}
+{% extends "home.html" %}
 
 {% block main %}
 <div class="form-card">
@@ -9,10 +9,6 @@
         <form method="POST" action="{% url 'inventario:guardar_prestamo' %}">
     {% endif %}
         {% csrf_token %}
-        <div class="form-group">
-            <label>Fecha devolucion esperada</label>
-            {{ formulario.fecha_devolucion_esperada }}
-        </div>
         {% if prestamo %}
             <div class="form-group">
                 <label>Fecha devolucion</label>
@@ -22,12 +18,15 @@
                 <label>Observaciones devolucion</label>
                 {{ formulario.observaciones_devolucion }}
             </div>
-        {% endif %}
-        <div class="form-group">
-            <label>Estado prestamo</label>
-            {{ formulario.estado_prestamo }}
-        </div>
-        {% if not prestamo %}
+            <div class="form-group">
+                <label>Estado prestamo</label>
+                {{ formulario.estado_prestamo }}
+            </div>
+        {% else %}
+            <div class="form-group">
+                <label>Fecha devolucion esperada</label>
+                {{ formulario.fecha_devolucion_esperada }}
+            </div>
             <div class="form-group">
                 <label>Observaciones entrega</label>
                 {{ formulario.observaciones_entrega }}
@@ -44,5 +43,3 @@
     </form>
 </div>
 {% endblock %}
-
-

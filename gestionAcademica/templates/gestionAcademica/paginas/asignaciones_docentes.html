@@ -1,0 +1,80 @@
+{% extends 'gestionAcademica/primary-layout.html' %}
+{% block titulo %}{{ titulo }}{% endblock %}
+{% block contenido %}
+
+<style>
+    .asignaciones-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 18px;
+    }
+
+    .docente-card {
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-left: 4px solid #ff5a2c;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+        padding: 18px;
+    }
+
+    .docente-card h2 {
+        margin-bottom: 6px;
+    }
+
+    .docente-meta {
+        color: #667085;
+        font-size: 13px;
+        margin-bottom: 14px;
+    }
+
+    .materias-mini {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        min-height: 34px;
+        margin-bottom: 14px;
+    }
+
+    .materia-chip {
+        background: #fff1ec;
+        border-radius: 999px;
+        color: #b93815;
+        font-size: 12px;
+        font-weight: 700;
+        padding: 5px 9px;
+    }
+
+    .sin-materias {
+        color: #98a2b3;
+        font-size: 13px;
+        font-style: italic;
+    }
+</style>
+
+<h1>{{ titulo }}</h1>
+
+<div class="asignaciones-grid">
+    {% for item in resumen %}
+        <div class="docente-card">
+            <h2>{{ item.profesor.nombre_usuario }}</h2>
+            <div class="docente-meta">
+                Documento {{ item.profesor.id_usuario }} ·
+                Facultad: <strong>{{ item.facultad|default:"Sin asignar" }}</strong> ·
+                {{ item.total_materias }} materia{{ item.total_materias|pluralize }}
+            </div>
+            <div class="materias-mini">
+                {% for materia in item.materias %}
+                    <span class="materia-chip">{{ materia.nombre }}</span>
+                {% empty %}
+                    <span class="sin-materias">Sin materias asignadas</span>
+                {% endfor %}
+            </div>
+            <a href="{% url 'editar_asignacion_docente' item.profesor.pk %}" class="btn btn-primario">Asignar</a>
+        </div>
+    {% empty %}
+        <p>No hay profesores registrados.</p>
+    {% endfor %}
+</div>
+
+{% endblock %}

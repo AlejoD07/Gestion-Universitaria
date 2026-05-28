@@ -1,0 +1,324 @@
+{% extends 'base.html' %}
+
+{% block titulo %}{% if actividad %}Editar{% else %}Crear{% endif %} Actividad - {{ materia.nombre }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .form-section {
+        background: white;
+        border-radius: 12px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .form-section h3 {
+        color: #1f2937;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid #ff5a2c;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 0.5rem;
+    }
+
+    .form-control:focus {
+        border-color: #ff5a2c;
+        box-shadow: 0 0 0 3px rgba(255, 90, 44, 0.1);
+    }
+
+    .input-helper {
+        font-size: 0.85rem;
+        color: #6b7280;
+        margin-top: 0.25rem;
+    }
+
+    .porcentaje-display {
+        background: #f3f4f6;
+        padding: 1rem;
+        border-radius: 8px;
+        margin-top: 1rem;
+        text-align: center;
+    }
+
+    .porcentaje-number {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #ff5a2c;
+    }
+
+    .materia-info {
+        background: linear-gradient(135deg, #ff5a2c, #ff7a50);
+        color: white;
+        padding: 2rem;
+        border-radius: 12px;
+        margin-bottom: 2rem;
+    }
+
+    .materia-info h2 {
+        margin-bottom: 0.5rem;
+        font-weight: 700;
+    }
+
+    .tipo-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 0.75rem;
+    }
+
+    .tipo-option {
+        position: relative;
+    }
+
+    .tipo-option input[type="radio"] {
+        display: none;
+    }
+
+    .tipo-label {
+        display: block;
+        padding: 0.75rem;
+        border: 2px solid #e5e7eb;
+        border-radius: 8px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s;
+        background: white;
+    }
+
+    .tipo-option input[type="radio"]:checked + .tipo-label {
+        border-color: #ff5a2c;
+        background: #fff1ec;
+        font-weight: 600;
+        color: #ff5a2c;
+    }
+
+    .tipo-label:hover {
+        border-color: #ff5a2c;
+        background: #f9f5f3;
+    }
+
+    .btn-group-custom {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2rem;
+    }
+
+    .btn-cancel {
+        background: #e5e7eb;
+        color: #374151;
+        border: none;
+    }
+
+    .btn-cancel:hover {
+        background: #d1d5db;
+        color: #374151;
+    }
+
+    .alert-warning {
+        background: #fff1ec;
+        border: 1px solid #fca5a5;
+        color: #991b1b;
+    }
+
+    .emoji {
+        font-size: 1.5rem;
+        margin-bottom: 0.25rem;
+    }
+</style>
+{% endblock %}
+
+{% block contenido %}
+<div class="container">
+    <!-- Información de la materia -->
+    <div class="materia-info">
+        <h2><i class="fas fa-plus-circle"></i> {% if actividad %}Editar Actividad{% else %}Crear Nueva Actividad{% endif %}</h2>
+        <p>Materia: <strong>{{ materia.nombre }}</strong> | Programa: <strong>{{ materia.programa }}</strong></p>
+    </div>
+
+    <!-- Mostrar errores -->
+    {% if alert_message %}
+        <div data-alert-message="{{ alert_message|escape }}" hidden></div>
+    {% endif %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert" data-alert-message="{{ message|escape }}">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- Formulario -->
+    <form method="post" class="form-section">
+        {% csrf_token %}
+
+        <!-- Información básica -->
+        <h3><i class="fas fa-info-circle"></i> Información de la Actividad</h3>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="nombre" class="form-label">Nombre de la Actividad *</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="nombre"
+                        name="nombre"
+                        value="{{ form_values.nombre|default:'' }}"
+                        placeholder="Ej: Quiz 1, Taller de Algoritmos, Examen Parcial"
+                        required
+                    >
+                    <div class="input-helper">Describe brevemente qué es esta evaluación</div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="periodo" class="form-label">Período Académico *</label>
+                    <select class="form-control" id="periodo" name="periodo" required>
+                        <option value="">-- Selecciona un período --</option>
+                        {% for periodo in periodos %}
+                            <option value="{{ periodo.id }}" {% if form_values.periodo == periodo.id|stringformat:"s" %}selected{% endif %}>{{ periodo.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="numero_corte" class="form-label">Corte Académico *</label>
+            <select class="form-control" id="numero_corte" name="numero_corte" required>
+                {% for valor, etiqueta in cortes %}
+                    <option value="{{ valor }}" {% if form_values.numero_corte == valor|stringformat:"s" %}selected{% endif %}>{{ etiqueta }}</option>
+                {% endfor %}
+            </select>
+            <div class="input-helper">Cada corte maneja su propio conjunto de actividades y debe completar el 100%.</div>
+        </div>
+
+        <!-- Tipo de actividad -->
+        <div class="form-group">
+            <label class="form-label">Tipo de Actividad *</label>
+            <div class="tipo-grid">
+                {% for valor, etiqueta in tipos_actividad %}
+                <div class="tipo-option">
+                    <input
+                        type="radio"
+                        id="tipo_{{ valor }}"
+                        name="tipo"
+                        value="{{ valor }}"
+                        {% if form_values.tipo == valor %}checked{% endif %}
+                        required
+                    >
+                    <label for="tipo_{{ valor }}" class="tipo-label">
+                        <div class="emoji">
+                            {% if valor == 'QUIZ' %}
+                            {% elif valor == 'TALLER' %}
+                            {% elif valor == 'PARCIAL' %}
+                            {% elif valor == 'FINAL' %}
+                            {% elif valor == 'PROYECTO' %}
+                            {% elif valor == 'PARTICIPACION' %}
+                            {% else %}{% endif %}
+                        </div>
+                        {{ etiqueta }}
+                    </label>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="input-helper">Selecciona el tipo de evaluación</div>
+        </div>
+
+        <!-- Porcentaje -->
+        <div class="form-group">
+            <label for="porcentaje" class="form-label">Porcentaje de la Nota Final *</label>
+            <div class="input-group">
+                <input
+                    type="number"
+                    class="form-control"
+                    id="porcentaje"
+                    name="porcentaje"
+                    step="0.01"
+                    min="0.01"
+                    max="100"
+                    value="{{ form_values.porcentaje|default:'' }}"
+                    placeholder="Ej: 15.00"
+                    required
+                    oninput="actualizarPorcentaje()"
+                >
+                <span class="input-group-text">%</span>
+            </div>
+            <div class="input-helper">
+                ¿Qué porcentaje de la nota final representa esta actividad?
+                La suma de todos los porcentajes del corte debe ser 100%
+            </div>
+            <div class="porcentaje-display">
+                <div class="porcentaje-number" id="porcentaje-display">0</div>
+                <small>Porcentaje de esta actividad</small>
+            </div>
+        </div>
+
+        <!-- Descripción -->
+        <div class="form-group">
+            <label for="descripcion" class="form-label">Descripción (Opcional)</label>
+            <textarea
+                class="form-control"
+                id="descripcion"
+                name="descripcion"
+                rows="3"
+                placeholder="Detalles adicionales sobre la actividad, criterios de evaluación, etc."
+            >{{ form_values.descripcion|default:'' }}</textarea>
+        </div>
+
+        <hr class="my-4">
+
+        <!-- Botones -->
+        <div class="btn-group-custom">
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save"></i> {% if actividad %}Guardar Cambios{% else %}Crear Actividad{% endif %}
+            </button>
+            <a href="{% if actividad %}/academica/profesor/actividades/{{ materia.pk }}/{% else %}/academica/profesor/materias/{% endif %}" class="btn btn-cancel">
+                <i class="fas fa-times"></i> Cancelar
+            </a>
+        </div>
+    </form>
+
+    <!-- Información de ayuda -->
+    <div class="alert alert-warning" role="alert">
+        <i class="fas fa-lightbulb"></i> <strong>Consejo:</strong>
+        Una vez crear la actividad, el sistema creará automáticamente espacios de calificación
+        para todos los estudiantes inscritos en esta materia y período.
+    </div>
+</div>
+
+<script>
+function actualizarPorcentaje() {
+    const input = document.getElementById('porcentaje');
+    const display = document.getElementById('porcentaje-display');
+    const valor = input.value || '0';
+    display.textContent = valor;
+}
+actualizarPorcentaje();
+
+document.addEventListener('DOMContentLoaded', function () {
+    const mensajes = Array.from(document.querySelectorAll('[data-alert-message]'))
+        .map((item) => item.dataset.alertMessage)
+        .filter(Boolean);
+
+    if (mensajes.length) {
+        alert(mensajes.join('\n'));
+        const porcentaje = document.getElementById('porcentaje');
+        if (porcentaje) {
+            porcentaje.focus();
+            porcentaje.select();
+        }
+    }
+});
+</script>
+{% endblock %}

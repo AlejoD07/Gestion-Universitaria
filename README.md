@@ -19,14 +19,13 @@ En una universidad, cada área suele trabajar con información separada: profeso
 
 El usuario se ingresa con documento y la clave demo es el nombre del usuario.
 
-- Súper administrador: `9000` / `Super Administrador`
-- Administrador: `1001` / `Admin Academico`
-- Profesor: `9500` / `Profesor Demo`
-- Contabilidad: `9100` / `Usuario Contabilidad`
-- Recursos Humanos: `9200` / `Usuario Recursos Humanos`
-- inventario: `9300` / `Usuario inventario`
-- Solicitudes: `9400` / `Usuario Solicitudes`
-- Estudiante: `9600` / `Estudiante Demo`
+- Súper administrador: `9000` / `Camilo Restrepo`
+- Administrador: `1001` / `Daniela Pardo`
+- Contabilidad: `9100` / `Carolina Vargas`
+- Recursos Humanos: `9200` / `Natalia Herrera`
+- inventario: `9300` / `Miguel Torres`
+- Solicitudes: `9400` / `Sofia Martinez`
+- Estudiante: `9600` / `Andres Felipe Rios`
 
 ## Ejecución en Git Bash
 

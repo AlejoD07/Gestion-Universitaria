@@ -1,0 +1,46 @@
+{% extends 'contabilidad/primary-layout.html' %}
+{% block titulo %}Ajuste presupuestal{% endblock %}
+{% block contenido %}
+
+<h1>Ajuste presupuestal</h1>
+
+<div class="formulario">
+    <p><strong>{{ partida.area }}</strong> - {{ partida.concepto }}</p>
+    <p>Vigente actual: <strong>$ {{ partida.presupuesto_vigente }}</strong></p>
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="campo">
+            <label>Tipo de ajuste</label>
+            <select name="tipo" required>
+                {% for valor, etiqueta in tipos %}
+                    <option value="{{ valor }}">{{ etiqueta }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="campo">
+            <label>Valor</label>
+            <input type="number" name="valor" step="0.01" required>
+        </div>
+        <div class="campo">
+            <label>Fecha</label>
+            <input type="date" name="fecha" required>
+        </div>
+        <div class="campo">
+            <label>Estado</label>
+            <select name="estado">
+                {% for valor, etiqueta in estados %}
+                    <option value="{{ valor }}" {% if valor == 'aprobado' %}selected{% endif %}>{{ etiqueta }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="campo">
+            <label>Motivo</label>
+            <textarea name="motivo" rows="4" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primario">Guardar ajuste</button>
+        <a href="{% url 'detalle_plan_presupuestal' partida.plan_id %}" class="btn btn-secundario">Cancelar</a>
+    </form>
+</div>
+
+{% endblock %}

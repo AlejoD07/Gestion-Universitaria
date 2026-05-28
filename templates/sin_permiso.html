@@ -1,22 +1,61 @@
-﻿<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sin permiso</title>
-    <style>
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #f4f6f9; min-height: 100vh; display: grid; place-items: center; margin: 0; color: #20242a; }
-        .card { background: white; padding: 36px; border-radius: 12px; max-width: 520px; box-shadow: 0 12px 30px rgba(0,0,0,.1); text-align: center; }
-        h1 { margin-bottom: 12px; }
-        p { color: #667085; line-height: 1.5; }
-        a { display: inline-block; margin-top: 20px; background: #ff5a2c; color: white; text-decoration: none; padding: 12px 18px; border-radius: 8px; font-weight: 700; }
-    </style>
-</head>
-<body>
-    <div class="card">
-        <h1>Acceso no autorizado</h1>
-        <p>Tu rol actual no tiene permiso para entrar a este módulo. Ingresa con un usuario autorizado o vuelve al panel principal.</p>
-        <a href="{% url 'home_general' %}">Volver al panel</a>
+{% extends 'base.html' %}
+
+{% block titulo %}Acceso Denegado - Gestión Universitaria{% endblock %}
+
+{% block contenido %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <div style="margin-bottom: 2rem;">
+                <i class="fas fa-lock" style="font-size: 4rem; color: #ff5a2c;"></i>
+            </div>
+
+            <h1 class="display-4 fw-bold mb-3">Acceso Denegado</h1>
+            <p class="lead text-muted mb-4">
+                No tienes permiso para acceder a este módulo con tu rol actual.
+            </p>
+
+            <div class="alert alert-warning" role="alert">
+                <i class="fas fa-info-circle"></i>
+                <strong>Información:</strong> Si crees que esto es un error, contacta a tu administrador.
+            </div>
+
+            <div class="mt-4">
+                <a href="{% url 'home_general' %}" class="btn btn-primary btn-lg">
+                    <i class="fas fa-home"></i> Volver al Dashboard
+                </a>
+                <a href="{% url 'logout' %}" class="btn btn-secondary btn-lg">
+                    <i class="fas fa-sign-out-alt"></i> Cambiar Cuenta
+                </a>
+            </div>
+
+            <!-- Información del Usuario -->
+            <div class="mt-5 p-4 border rounded" style="background-color: #f8f9fa;">
+                <h5 class="mb-3">Tu Información</h5>
+                <table class="table table-sm">
+                    <tr>
+                        <td><strong>Usuario:</strong></td>
+                        <td>{{ request.session.usuario_nombre }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Rol:</strong></td>
+                        <td>
+                            <span class="badge bg-secondary">{{ request.session.usuario_rol }}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Módulos Disponibles:</strong></td>
+                        <td>
+                            {% for mod in request.session.usuario_modulos %}
+                                <span class="badge bg-info">{{ mod }}</span>
+                            {% empty %}
+                                <span class="text-muted">Ninguno</span>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
     </div>
-</body>
-</html>
+</div>
+{% endblock %}

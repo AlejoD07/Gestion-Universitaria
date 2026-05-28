@@ -1,0 +1,40 @@
+{% extends 'contabilidad/primary-layout.html' %}
+{% block titulo %}Agregar partida{% endblock %}
+{% block contenido %}
+
+<h1>Agregar partida - {{ plan.nombre }}</h1>
+
+<div class="formulario">
+    <form method="post">
+        {% csrf_token %}
+        <div class="campo">
+            <label>Area</label>
+            <select name="area" required>
+                <option value="">-- Selecciona --</option>
+                {% for area in areas %}
+                    <option value="{{ area.nombre }}">{{ area.nombre }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="campo">
+            <label>Concepto</label>
+            <input type="text" name="concepto" required>
+        </div>
+        <div class="campo">
+            <label>Monto inicial</label>
+            <input type="number" name="monto_inicial" step="0.01" required>
+        </div>
+        <div class="campo">
+            <label>Monto ejecutado</label>
+            <input type="number" name="monto_ejecutado" step="0.01" value="0">
+        </div>
+        <div class="campo">
+            <label>Descripcion</label>
+            <textarea name="descripcion" rows="3"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primario">Guardar partida</button>
+        <a href="{% url 'detalle_plan_presupuestal' plan.id %}" class="btn btn-secundario">Cancelar</a>
+    </form>
+</div>
+
+{% endblock %}

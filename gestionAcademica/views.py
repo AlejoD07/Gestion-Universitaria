@@ -269,6 +269,61 @@ def lista_profesores(request):
     })
 
 
+def _profesores_queryset():
+    return Usuario.objects.select_related('facultad', 'id_tipo_documento', 'id_rol').filter(
+        Q(id_rol__nombre_rol__icontains='profesor') | Q(id_rol__nombre_rol__icontains='prof')
+    ).order_by('nombre_usuario')
+
+
+def asignaciones_docentes(request):
+    if not es_administrador_global(request):
+        return redirect('sin_permiso')
+
+    profesores = _profesores_queryset().prefetch_related('materias_asignadas')
+    resumen = []
+    for profesor in profesores:
+        materias = list(profesor.materias_asignadas.select_related('programa').filter(activa=True).order_by('nombre'))
+        resumen.append({
+            'profesor': profesor,
+            'facultad': profesor.facultad,
+            'materias': materias,
+            'total_materias': len(materias),
+        })
+
+    return render(request, 'gestionAcademica/paginas/asignaciones_docentes.html', {
+        'titulo': 'Asignaciones docentes',
+        'resumen': resumen,
+    })
+
+
+def editar_asignacion_docente(request, id):
+    if not es_administrador_global(request):
+        return redirect('sin_permiso')
+
+    profesor = get_object_or_404(_profesores_queryset(), id_usuario=id)
+    materias = Materia.objects.select_related('programa', 'programa__facultad', 'profesor').filter(activa=True).order_by('programa__nombre', 'nombre')
+
+    if request.method == 'POST':
+        profesor.facultad = get_object_or_404(Facultad, pk=request.POST['facultad']) if request.POST.get('facultad') else None
+        profesor.save()
+
+        materias_seleccionadas = request.POST.getlist('materias')
+        Materia.objects.filter(profesor=profesor).exclude(pk__in=materias_seleccionadas).update(profesor=None)
+        Materia.objects.filter(pk__in=materias_seleccionadas, activa=True).update(profesor=profesor)
+
+        messages.success(request, f'Asignacion docente actualizada para {profesor.nombre_usuario}.')
+        return redirect('asignaciones_docentes')
+
+    materias_actuales = set(profesor.materias_asignadas.values_list('pk', flat=True))
+    return render(request, 'gestionAcademica/paginas/editar_asignacion_docente.html', {
+        'titulo': f'Asignar docencia - {profesor.nombre_usuario}',
+        'profesor': profesor,
+        'facultades': Facultad.objects.filter(activa=True).order_by('nombre'),
+        'materias': materias,
+        'materias_actuales': materias_actuales,
+    })
+
+
 def crear_usuario(request):
     if request.method == 'POST':
         Usuario.objects.create(
@@ -416,7 +471,7 @@ def eliminar_estudiante(request, id):
 
 
 def lista_materias(request):
-    materias = Materia.objects.select_related('programa')
+    materias = _materias_visibles(request)
     filas = [[materia.id_materia, materia.nombre, materia.programa, materia.creditos, 'Activa' if materia.activa else 'Inactiva', materia.id_materia] for materia in materias]
     return render(request, 'gestionAcademica/paginas/lista.html', {
         'titulo': 'Materias',
@@ -425,12 +480,17 @@ def lista_materias(request):
         'filas': filas,
         'editar_url': 'editar_materia',
         'eliminar_url': 'eliminar_materia',
+        'ocultar_eliminar': _es_profesor_actual(request),
         'vacio': 'No hay materias registradas.',
     })
 
 
 def crear_materia(request):
     if request.method == 'POST':
+        profesor = _profesor_actual(request)
+        profesor_asignado = profesor
+        if profesor_asignado is None and request.POST.get('profesor'):
+            profesor_asignado = get_object_or_404(Usuario, pk=request.POST['profesor'])
         Materia.objects.create(
             id_materia=request.POST['id_materia'],
             nombre=request.POST['nombre'],
@@ -438,34 +498,41 @@ def crear_materia(request):
             descripcion=request.POST.get('descripcion', ''),
             activa=request.POST.get('activa') == 'on',
             programa=get_object_or_404(Programa, pk=request.POST['programa']),
-            profesor=get_object_or_404(Usuario, pk=request.POST['profesor']) if request.POST.get('profesor') else None,
+            profesor=profesor_asignado,
         )
         return redirect('lista_materias')
     return _render_materia_form(request, 'Nueva Materia', 'lista_materias')
 
 
 def editar_materia(request, id):
-    materia = get_object_or_404(Materia, id_materia=id)
+    materia = get_object_or_404(_materias_visibles(request), id_materia=id)
     if request.method == 'POST':
+        profesor = _profesor_actual(request)
+        profesor_asignado = profesor
+        if profesor_asignado is None and request.POST.get('profesor'):
+            profesor_asignado = get_object_or_404(Usuario, pk=request.POST['profesor'])
         materia.nombre = request.POST['nombre']
         materia.creditos = request.POST.get('creditos', 3)
         materia.descripcion = request.POST.get('descripcion', '')
         materia.activa = request.POST.get('activa') == 'on'
         materia.programa = get_object_or_404(Programa, pk=request.POST['programa'])
-        materia.profesor = get_object_or_404(Usuario, pk=request.POST['profesor']) if request.POST.get('profesor') else None
+        materia.profesor = profesor_asignado
         materia.save()
         return redirect('lista_materias')
     return _render_materia_form(request, 'Editar Materia', 'lista_materias', materia)
 
 
 def _render_materia_form(request, titulo, volver_url, materia=None):
+    profesor = _profesor_actual(request)
+    profesores = Usuario.objects.filter(pk=profesor.pk) if profesor else Usuario.objects.filter(id_rol__nombre_rol__icontains='prof')
+    profesor_seleccionado = profesor.pk if profesor else getattr(getattr(materia, 'profesor', None), 'pk', None)
     campos = []
     if materia is None:
         campos.append({'label': 'ID materia', 'name': 'id_materia', 'type': 'number', 'required': True})
     campos.extend([
         {'label': 'Nombre', 'name': 'nombre', 'type': 'text', 'value': getattr(materia, 'nombre', ''), 'required': True},
         {'label': 'Programa', 'name': 'programa', 'type': 'select', 'required': True, 'options': _opciones(Programa.objects.select_related('facultad'), getattr(getattr(materia, 'programa', None), 'pk', None))},
-        {'label': 'Profesor asignado', 'name': 'profesor', 'type': 'select', 'options': _opciones(Usuario.objects.filter(id_rol__nombre_rol__icontains='prof'), getattr(getattr(materia, 'profesor', None), 'pk', None))},
+        {'label': 'Profesor asignado', 'name': 'profesor', 'type': 'select', 'options': _opciones(profesores, profesor_seleccionado)},
         {'label': 'Creditos', 'name': 'creditos', 'type': 'number', 'value': getattr(materia, 'creditos', 3), 'required': True},
         {'label': 'Descripción', 'name': 'descripcion', 'type': 'textarea', 'value': getattr(materia, 'descripcion', '')},
         {'label': 'Activa', 'name': 'activa', 'type': 'checkbox', 'checked': True if materia is None else materia.activa},
@@ -586,6 +653,76 @@ def lista_notas(request):
     profesor = _profesor_actual(request)
     if profesor:
         notas = notas.filter(inscripcion__materia__profesor=profesor)
+
+    materia_id = request.GET.get('materia')
+    periodo_id = request.GET.get('periodo')
+    corte = request.GET.get('corte')
+    estudiante_id = request.GET.get('estudiante')
+
+    if materia_id:
+        notas = notas.filter(inscripcion__materia_id=materia_id)
+    if periodo_id:
+        notas = notas.filter(inscripcion__periodo_id=periodo_id)
+    if corte:
+        notas = notas.filter(corte=corte)
+    if estudiante_id:
+        notas = notas.filter(inscripcion__estudiante_id=estudiante_id)
+
+    inscripciones_visibles = _inscripciones_visibles(request)
+    materias_filtro = _materias_visibles(request).filter(
+        inscripcion__in=inscripciones_visibles,
+    ).distinct().order_by('nombre')
+    periodos_filtro = PeriodoAcademico.objects.filter(
+        inscripcion__in=inscripciones_visibles,
+    ).distinct().order_by('nombre')
+    estudiantes_filtro = Estudiante.objects.filter(
+        inscripcion__in=inscripciones_visibles,
+    ).select_related('usuario').distinct().order_by('codigo_estudiante')
+    cortes_filtro = Nota.objects.filter(
+        inscripcion__in=inscripciones_visibles,
+    ).order_by('corte').values_list('corte', flat=True).distinct()
+
+    filtros = [
+        {
+            'label': 'Materia',
+            'name': 'materia',
+            'placeholder': 'Todas las materias',
+            'options': _opciones(materias_filtro, materia_id),
+        },
+        {
+            'label': 'Periodo',
+            'name': 'periodo',
+            'placeholder': 'Todos los periodos',
+            'options': _opciones(periodos_filtro, periodo_id),
+        },
+        {
+            'label': 'Corte',
+            'name': 'corte',
+            'placeholder': 'Todos los cortes',
+            'options': [
+                {
+                    'valor': valor,
+                    'texto': f'Corte {valor}',
+                    'seleccionado': str(valor) == str(corte),
+                }
+                for valor in cortes_filtro
+            ],
+        },
+        {
+            'label': 'Estudiante',
+            'name': 'estudiante',
+            'placeholder': 'Todos los estudiantes',
+            'options': [
+                {
+                    'valor': estudiante.pk,
+                    'texto': f'{estudiante.codigo_estudiante} - {estudiante.usuario.nombre_usuario}',
+                    'seleccionado': str(estudiante.pk) == str(estudiante_id),
+                }
+                for estudiante in estudiantes_filtro
+            ],
+        },
+    ]
+
     filas = [
         [
             nota.id_nota,
@@ -600,11 +737,14 @@ def lista_notas(request):
     ]
     return render(request, 'gestionAcademica/paginas/lista.html', {
         'titulo': 'Notas',
-        'crear_url': 'crear_nota',
+        'crear_url': 'profesor_materias' if profesor else 'crear_nota',
+        'crear_texto': '+ Gestionar actividades y porcentajes' if profesor else '+ Nuevo Registro',
         'encabezados': ['ID', 'Estudiante', 'Materia', 'Periodo', 'Corte', 'Nota', 'Acciones'],
         'filas': filas,
         'editar_url': 'editar_nota',
         'eliminar_url': 'eliminar_nota',
+        'ocultar_eliminar': _es_profesor_actual(request),
+        'filtros': filtros,
         'vacio': 'No hay notas registradas.',
     })
 
@@ -615,27 +755,31 @@ def crear_nota(request):
         if valor is None:
             return _render_nota_form(request, 'Nueva Nota', 'lista_notas')
 
+        inscripcion = get_object_or_404(_inscripciones_visibles(request), pk=request.POST['inscripcion'])
         Nota.objects.create(
             id_nota=request.POST['id_nota'],
-            inscripcion=get_object_or_404(Inscripcion, pk=request.POST['inscripcion']),
+            inscripcion=inscripcion,
             corte=request.POST['corte'],
             valor=valor,
             observaciones=request.POST.get('observaciones', ''),
         )
-        _actualizar_promedio_estudiante(get_object_or_404(Inscripcion, pk=request.POST['inscripcion']).estudiante)
+        _actualizar_promedio_estudiante(inscripcion.estudiante)
         return redirect('lista_notas')
     return _render_nota_form(request, 'Nueva Nota', 'lista_notas')
 
 
 def editar_nota(request, id):
-    nota = get_object_or_404(Nota, id_nota=id)
+    nota = get_object_or_404(
+        Nota.objects.filter(inscripcion__in=_inscripciones_visibles(request)),
+        id_nota=id,
+    )
     estudiante_anterior = nota.inscripcion.estudiante
     if request.method == 'POST':
         valor = _validar_valor_nota(request)
         if valor is None:
             return _render_nota_form(request, 'Editar Nota', 'lista_notas', nota)
 
-        nota.inscripcion = get_object_or_404(Inscripcion, pk=request.POST['inscripcion'])
+        nota.inscripcion = get_object_or_404(_inscripciones_visibles(request), pk=request.POST['inscripcion'])
         nota.corte = request.POST['corte']
         nota.valor = valor
         nota.observaciones = request.POST.get('observaciones', '')
@@ -680,14 +824,16 @@ def lista_asistencias(request):
         'filas': filas,
         'editar_url': 'editar_asistencia',
         'eliminar_url': 'eliminar_asistencia',
+        'ocultar_eliminar': _es_profesor_actual(request),
         'vacio': 'No hay asistencias registradas.',
     })
 
 
 def crear_asistencia(request):
     if request.method == 'POST':
+        inscripcion = get_object_or_404(_inscripciones_visibles(request), pk=request.POST['inscripcion'])
         Asistencia.objects.create(
-            inscripcion=get_object_or_404(Inscripcion, pk=request.POST['inscripcion']),
+            inscripcion=inscripcion,
             fecha=request.POST['fecha'],
             asiste=request.POST.get('asiste') == 'on',
         )
@@ -696,9 +842,12 @@ def crear_asistencia(request):
 
 
 def editar_asistencia(request, id):
-    asistencia = get_object_or_404(Asistencia, id=id)
+    asistencia = get_object_or_404(
+        Asistencia.objects.filter(inscripcion__in=_inscripciones_visibles(request)),
+        id=id,
+    )
     if request.method == 'POST':
-        asistencia.inscripcion = get_object_or_404(Inscripcion, pk=request.POST['inscripcion'])
+        asistencia.inscripcion = get_object_or_404(_inscripciones_visibles(request), pk=request.POST['inscripcion'])
         asistencia.fecha = request.POST['fecha']
         asistencia.asiste = request.POST.get('asiste') == 'on'
         asistencia.save()
@@ -708,7 +857,7 @@ def editar_asistencia(request, id):
 
 def _render_asistencia_form(request, titulo, volver_url, asistencia=None):
     campos = [
-        {'label': 'Inscripcion', 'name': 'inscripcion', 'type': 'select', 'required': True, 'options': _opciones(Inscripcion.objects.all(), getattr(getattr(asistencia, 'inscripcion', None), 'pk', None))},
+        {'label': 'Inscripcion', 'name': 'inscripcion', 'type': 'select', 'required': True, 'options': _opciones_inscripciones(request, getattr(getattr(asistencia, 'inscripcion', None), 'pk', None))},
         {'label': 'Fecha', 'name': 'fecha', 'type': 'date', 'value': getattr(asistencia, 'fecha', ''), 'required': True},
         {'label': 'Asiste', 'name': 'asiste', 'type': 'checkbox', 'checked': True if asistencia is None else asistencia.asiste},
     ]
@@ -723,7 +872,3 @@ def saludo_autor(request, id_usuario):
     usuario = get_object_or_404(Usuario, id_usuario=id_usuario)
     usuarios = Usuario.objects.all()
     return render(request, 'saludo_autor.html', {'usuario': usuario, 'usuarios': usuarios})
-
-
-
-

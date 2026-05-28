@@ -1,0 +1,118 @@
+{% extends 'contabilidad/primary-layout.html' %}
+{% block titulo %}Detalle lote {{ lote.codigo }}{% endblock %}
+{% block contenido %}
+
+<style>
+    .lote-header {
+        background: white;
+        border-left: 4px solid #ff5a2c;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,.08);
+        margin-bottom: 20px;
+        padding: 20px;
+    }
+
+    .totales-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+        gap: 12px;
+        margin: 16px 0;
+    }
+
+    .total-card {
+        background: #f8fafc;
+        border-radius: 8px;
+        padding: 13px;
+    }
+
+    .total-card span {
+        color: #667085;
+        display: block;
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+    }
+
+    .total-card strong {
+        color: #ff5a2c;
+        display: block;
+        font-size: 20px;
+        margin-top: 4px;
+    }
+
+    .conceptos {
+        background: #f8fafc;
+        border-radius: 8px;
+        margin-top: 8px;
+        padding: 8px;
+    }
+
+    .concepto-chip {
+        display: inline-flex;
+        gap: 6px;
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 999px;
+        font-size: 12px;
+        margin: 3px;
+        padding: 5px 8px;
+    }
+
+    .devengado { color: #166534; }
+    .deduccion { color: #991b1b; }
+</style>
+
+<h1>Detalle lote {{ lote.codigo }}</h1>
+
+<div class="lote-header">
+    <p><strong>Origen:</strong> {{ lote.plataforma_origen }} · <strong>Periodo:</strong> {{ lote.mes }} {{ lote.anio }} · <strong>Estado:</strong> {{ lote.get_estado_display }}</p>
+    <p>{{ lote.observaciones }}</p>
+    <div class="totales-grid">
+        <div class="total-card"><span>Empleados</span><strong>{{ lote.total_empleados }}</strong></div>
+        <div class="total-card"><span>Total devengado</span><strong>$ {{ lote.total_devengado }}</strong></div>
+        <div class="total-card"><span>Total deducciones</span><strong>$ {{ lote.total_deducciones }}</strong></div>
+        <div class="total-card"><span>Neto a pagar</span><strong>$ {{ lote.total_neto }}</strong></div>
+    </div>
+    <a href="{% url 'validar_lote_nomina' lote.id %}" class="btn btn-secundario">Validar lote</a>
+    <a href="{% url 'contabilizar_lote_nomina' lote.id %}" class="btn btn-primario">Marcar contabilizado</a>
+    <a href="{% url 'lista_nominas' %}" class="btn btn-secundario">Volver</a>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>Empleado</th>
+            <th>Cedula</th>
+            <th>Cargo / Area</th>
+            <th>Devengado</th>
+            <th>Deducciones</th>
+            <th>Neto</th>
+            <th>Conceptos</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for detalle in lote.detalles.all %}
+        <tr>
+            <td>{{ detalle.empleado_nombre }}<br><small>{{ detalle.get_estado_display }} {{ detalle.mensaje_validacion }}</small></td>
+            <td>{{ detalle.empleado_cedula }}</td>
+            <td>{{ detalle.cargo|default:"Sin cargo" }}<br><small>{{ detalle.area|default:"Sin area" }}</small></td>
+            <td>$ {{ detalle.total_devengado }}</td>
+            <td>$ {{ detalle.total_deducciones }}</td>
+            <td><strong>$ {{ detalle.neto_pagar }}</strong></td>
+            <td>
+                <div class="conceptos">
+                    {% for concepto in detalle.conceptos.all %}
+                        <span class="concepto-chip {{ concepto.tipo }}">{{ concepto.nombre }}: $ {{ concepto.valor }}</span>
+                    {% endfor %}
+                </div>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="7" style="text-align:center; padding:20px;">Sin detalle importado.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends 'contabilidad/primary-layout.html' %}
+{% block titulo %}Revision trimestral{% endblock %}
+{% block contenido %}
+
+<h1>Revision trimestral - {{ plan.nombre }}</h1>
+
+<div class="formulario">
+    <form method="post">
+        {% csrf_token %}
+        <div class="campo">
+            <label>Trimestre</label>
+            <select name="trimestre" required>
+                <option value="1">Trimestre 1</option>
+                <option value="2">Trimestre 2</option>
+                <option value="3">Trimestre 3</option>
+                <option value="4">Trimestre 4</option>
+            </select>
+        </div>
+        <div class="campo">
+            <label>Fecha revision</label>
+            <input type="date" name="fecha_revision" required>
+        </div>
+        <div class="campo">
+            <label>Decision</label>
+            <select name="decision" required>
+                {% for valor, etiqueta in decisiones %}
+                    <option value="{{ valor }}">{{ etiqueta }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="campo">
+            <label>Observaciones</label>
+            <textarea name="observaciones" rows="4" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primario">Guardar revision</button>
+        <a href="{% url 'detalle_plan_presupuestal' plan.id %}" class="btn btn-secundario">Cancelar</a>
+    </form>
+</div>
+
+{% endblock %}

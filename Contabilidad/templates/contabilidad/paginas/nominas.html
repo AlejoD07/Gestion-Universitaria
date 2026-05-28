@@ -1,18 +1,125 @@
 {% extends 'contabilidad/primary-layout.html' %}
-{% block titulo %}Nóminas{% endblock %}
+{% block titulo %}Nominas{% endblock %}
 {% block contenido %}
+
+<style>
+    .acciones-nomina {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-bottom: 20px;
+    }
+
+    .resumen-lotes {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 14px;
+        margin-bottom: 22px;
+    }
+
+    .metric-card {
+        background: white;
+        border-radius: 10px;
+        border-top: 4px solid #ff5a2c;
+        box-shadow: 0 2px 8px rgba(0,0,0,.08);
+        padding: 16px;
+    }
+
+    .metric-card span {
+        color: #667085;
+        display: block;
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+    }
+
+    .metric-card strong {
+        color: #ff5a2c;
+        display: block;
+        font-size: 22px;
+        margin-top: 6px;
+    }
+
+    .estado-chip {
+        border-radius: 999px;
+        display: inline-block;
+        font-size: 12px;
+        font-weight: 700;
+        padding: 5px 9px;
+    }
+
+    .estado-importado { background: #e0f2fe; color: #075985; }
+    .estado-validado { background: #dcfce7; color: #166534; }
+    .estado-inconsistencias { background: #fee2e2; color: #991b1b; }
+    .estado-contabilizado { background: #f3e8ff; color: #6b21a8; }
+
+    .section-title {
+        margin-top: 26px;
+    }
+</style>
 
 <h1>Nominas</h1>
 
-<a href="{% url 'crear_nomina' %}" class="btn btn-primario" style="margin-bottom: 20px; display: inline-block;">+ Nueva Nomina</a>
+<div class="acciones-nomina">
+    <a href="{% url 'simular_importacion_nomina' %}" class="btn btn-primario">Importar nomina externa</a>
+    <a href="{% url 'crear_nomina' %}" class="btn btn-secundario">Registro manual legacy</a>
+</div>
 
+<div class="resumen-lotes">
+    <div class="metric-card">
+        <span>Lotes importados</span>
+        <strong>{{ lotes|length }}</strong>
+    </div>
+    <div class="metric-card">
+        <span>Registros manuales</span>
+        <strong>{{ nominas|length }}</strong>
+    </div>
+</div>
+
+<h2>Lotes de integracion</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Codigo</th>
+            <th>Origen</th>
+            <th>Periodo</th>
+            <th>Empleados</th>
+            <th>Devengado</th>
+            <th>Deducciones</th>
+            <th>Neto</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for lote in lotes %}
+        <tr>
+            <td>{{ lote.codigo }}</td>
+            <td>{{ lote.plataforma_origen }}</td>
+            <td>{{ lote.mes }} {{ lote.anio }}</td>
+            <td>{{ lote.total_empleados }}</td>
+            <td>$ {{ lote.total_devengado }}</td>
+            <td>$ {{ lote.total_deducciones }}</td>
+            <td>$ {{ lote.total_neto }}</td>
+            <td><span class="estado-chip estado-{{ lote.estado }}">{{ lote.get_estado_display }}</span></td>
+            <td><a href="{% url 'detalle_lote_nomina' lote.id %}" class="btn btn-secundario">Ver detalle</a></td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="9" style="text-align:center; padding:20px; color:#888;">No hay lotes importados.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h2 class="section-title">Registros manuales legacy</h2>
 <table>
     <thead>
         <tr>
             <th>Empleado</th>
-            <th>Cédula</th>
+            <th>Cedula</th>
             <th>Cargo</th>
-            <th>Mes / Año</th>
+            <th>Mes / Ano</th>
             <th>Salario Base</th>
             <th>Total Pago</th>
             <th>Estado</th>
@@ -28,9 +135,7 @@
             <td>{{ nomina.mes }} {{ nomina.anio }}</td>
             <td>$ {{ nomina.salario_base }}</td>
             <td>$ {{ nomina.total_pago }}</td>
-            <td>
-                <span class="estado-{{ nomina.estado }}">{{ nomina.estado }}</span>
-            </td>
+            <td>{{ nomina.estado }}</td>
             <td>
                 <a href="{% url 'editar_nomina' nomina.id %}" class="btn btn-secundario">Editar</a>
                 <a href="{% url 'eliminar_nomina' nomina.id %}" class="btn btn-peligro btn-eliminar">Eliminar</a>
@@ -38,7 +143,7 @@
         </tr>
         {% empty %}
         <tr>
-            <td colspan="8" style="text-align: center; padding: 20px; color: #888;">No hay nóminas registradas.</td>
+            <td colspan="8" style="text-align: center; padding: 20px; color: #888;">No hay nominas manuales registradas.</td>
         </tr>
         {% endfor %}
     </tbody>

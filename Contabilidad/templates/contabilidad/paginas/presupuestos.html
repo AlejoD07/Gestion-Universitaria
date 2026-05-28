@@ -2,16 +2,109 @@
 {% block titulo %}Presupuestos{% endblock %}
 {% block contenido %}
 
+<style>
+    .acciones-presupuesto {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-bottom: 20px;
+    }
+
+    .planes-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 18px;
+        margin-bottom: 28px;
+    }
+
+    .plan-card {
+        background: white;
+        border-left: 4px solid #ff5a2c;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,.08);
+        padding: 18px;
+    }
+
+    .plan-card h2 {
+        margin-bottom: 8px;
+    }
+
+    .plan-meta {
+        color: #667085;
+        font-size: 13px;
+        margin-bottom: 14px;
+    }
+
+    .plan-totales {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        margin-bottom: 14px;
+    }
+
+    .plan-total {
+        background: #f8fafc;
+        border-radius: 8px;
+        padding: 10px;
+    }
+
+    .plan-total span {
+        color: #667085;
+        display: block;
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+    }
+
+    .plan-total strong {
+        color: #ff5a2c;
+        display: block;
+        margin-top: 4px;
+    }
+
+    .section-title {
+        margin-top: 24px;
+    }
+</style>
+
 <h1>Presupuestos</h1>
 
-<a href="{% url 'crear_presupuesto' %}" class="btn btn-primario" style="margin-bottom: 20px; display: inline-block;">+ Nuevo Presupuesto</a>
+<div class="acciones-presupuesto">
+    <a href="{% url 'crear_plan_presupuestal' %}" class="btn btn-primario">Crear plan anual</a>
+    <form method="post" action="{% url 'crear_plan_presupuestal_demo' %}" style="display:inline;">
+        {% csrf_token %}
+        <input type="hidden" name="anio" value="2026">
+        <button type="submit" class="btn btn-secundario">Crear demo 2026</button>
+    </form>
+    <a href="{% url 'crear_presupuesto' %}" class="btn btn-secundario">Registro mensual legacy</a>
+</div>
 
+<h2>Planes presupuestales anuales</h2>
+<div class="planes-grid">
+    {% for plan in planes %}
+        <div class="plan-card">
+            <h2>{{ plan.nombre }}</h2>
+            <div class="plan-meta">{{ plan.anio }} · {{ plan.get_estado_display }} · {{ plan.partidas.count }} partidas · {{ plan.revisiones.count }} revisiones</div>
+            <div class="plan-totales">
+                <div class="plan-total"><span>Vigente</span><strong>$ {{ plan.total_vigente }}</strong></div>
+                <div class="plan-total"><span>Ejecutado</span><strong>$ {{ plan.total_ejecutado }}</strong></div>
+                <div class="plan-total"><span>Disponible</span><strong>$ {{ plan.total_disponible }}</strong></div>
+                <div class="plan-total"><span>Ajustes</span><strong>$ {{ plan.total_ajustes }}</strong></div>
+            </div>
+            <a href="{% url 'detalle_plan_presupuestal' plan.id %}" class="btn btn-primario">Ver seguimiento</a>
+        </div>
+    {% empty %}
+        <p>No hay planes presupuestales. Puedes crear el demo 2026 para cargar partidas iniciales.</p>
+    {% endfor %}
+</div>
+
+<h2 class="section-title">Presupuestos mensuales legacy</h2>
 <table>
     <thead>
         <tr>
             <th>Nombre</th>
             <th>Area</th>
-            <th>Mes / Año</th>
+            <th>Mes / Ano</th>
             <th>Monto Asignado</th>
             <th>Monto Gastado</th>
             <th>Saldo</th>
@@ -34,7 +127,7 @@
         </tr>
         {% empty %}
         <tr>
-            <td colspan="7" style="text-align: center; padding: 20px; color: #888;">No hay presupuestos registrados.</td>
+            <td colspan="7" style="text-align:center; padding:20px; color:#888;">No hay presupuestos mensuales registrados.</td>
         </tr>
         {% endfor %}
     </tbody>

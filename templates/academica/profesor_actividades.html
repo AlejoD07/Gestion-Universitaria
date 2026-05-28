@@ -1,0 +1,349 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Actividades - {{ materia.nombre }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .header-materia {
+        background: linear-gradient(135deg, #ff5a2c, #ff7a50);
+        color: white;
+        padding: 2rem;
+        border-radius: 12px;
+        margin-bottom: 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+    }
+
+    .header-materia h1 {
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+
+    .btn-crear {
+        background: white;
+        color: #ff5a2c;
+        border: none;
+        font-weight: 700;
+    }
+
+    .btn-crear:hover {
+        background: #f0f0f0;
+        color: #ff5a2c;
+    }
+
+    .periodo-section {
+        background: white;
+        border-radius: 12px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .periodo-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid #ff5a2c;
+        margin-bottom: 1.5rem;
+    }
+
+    .periodo-header h3 {
+        color: #1f2937;
+        font-weight: 700;
+        margin: 0;
+    }
+
+    .porcentaje-total {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        background: #f3f4f6;
+        border-radius: 8px;
+        font-weight: 600;
+    }
+
+    .porcentaje-total.completo {
+        background: #dcfce7;
+        color: #166534;
+    }
+
+    .porcentaje-total.incompleto {
+        background: #fee2e2;
+        color: #991b1b;
+    }
+
+    .actividad-row {
+        display: grid;
+        grid-template-columns: 1fr 100px 100px 230px;
+        gap: 1rem;
+        padding: 1rem;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        margin-bottom: 0.75rem;
+        align-items: center;
+        background: #f9fafb;
+    }
+
+    .actividad-info {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .actividad-icon {
+        font-size: 1.5rem;
+        min-width: 30px;
+        text-align: center;
+    }
+
+    .actividad-details h5 {
+        color: #1f2937;
+        font-weight: 700;
+        margin: 0;
+        margin-bottom: 0.25rem;
+    }
+
+    .actividad-details p {
+        color: #6b7280;
+        font-size: 0.85rem;
+        margin: 0;
+    }
+
+    .porcentaje-badge {
+        background: #ff5a2c;
+        color: white;
+        padding: 0.5rem 0.75rem;
+        border-radius: 6px;
+        text-align: center;
+        font-weight: 700;
+    }
+
+    .calificados-info {
+        text-align: center;
+        font-size: 0.9rem;
+    }
+
+    .calificados-info strong {
+        color: #ff5a2c;
+        font-weight: 700;
+    }
+
+    .acciones-buttons {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .btn-sm-custom {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .btn-calificar {
+        background: #3b82f6;
+        color: white;
+    }
+
+    .btn-editar {
+        background: #6b7280;
+        color: white;
+    }
+
+    .btn-editar:hover {
+        background: #4b5563;
+        text-decoration: none;
+        color: white;
+    }
+
+    .btn-calificar:hover {
+        background: #1d4ed8;
+        text-decoration: none;
+        color: white;
+    }
+
+    .btn-reporte {
+        background: #10b981;
+        color: white;
+    }
+
+    .btn-reporte:hover {
+        background: #059669;
+        text-decoration: none;
+        color: white;
+    }
+
+    .sin-actividades {
+        text-align: center;
+        padding: 3rem 1rem;
+        color: #6b7280;
+    }
+
+    .sin-actividades i {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        opacity: 0.5;
+    }
+
+    .alerta-validacion {
+        background: #fef3c7;
+        border: 1px solid #fcd34d;
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+    }
+
+    .alerta-validacion.excelente {
+        background: #dcfce7;
+        border-color: #86efac;
+        color: #166534;
+    }
+
+    .alerta-validacion.warning {
+        background: #fee2e2;
+        border-color: #fca5a5;
+        color: #991b1b;
+    }
+
+    @media (max-width: 768px) {
+        .actividad-row {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block contenido %}
+<div class="container">
+    <!-- Header -->
+    <div class="header-materia">
+        <div>
+            <h1>Actividades</h1>
+            <p>{{ materia.nombre }}</p>
+        </div>
+        <a href="/academica/profesor/actividad/crear/{{ materia.pk }}/" class="btn btn-crear btn-lg">
+            <i class="fas fa-plus-circle"></i> Nueva Actividad
+        </a>
+    </div>
+
+    <!-- Actividades por período -->
+    {% for periodo_key, datos_periodo in actividades_por_periodo.items %}
+    <div class="periodo-section">
+        <!-- Header del período -->
+        <div class="periodo-header">
+            <h3><i class="fas fa-calendar"></i> {{ datos_periodo.periodo }} - Corte {{ datos_periodo.numero_corte }}</h3>
+            <div class="porcentaje-total {% if datos_periodo.porcentajes_completos %}completo{% elif datos_periodo.suma_porcentajes > 0 %}incompleto{% endif %}">
+                <i class="fas fa-{% if datos_periodo.porcentajes_completos %}check-circle{% else %}alert-circle{% endif %}"></i>
+                <span>{{ datos_periodo.suma_porcentajes }}% asignado</span>
+            </div>
+        </div>
+
+        <!-- Validación de porcentajes -->
+        {% if not datos_periodo.porcentajes_completos %}
+        <div class="alerta-validacion warning">
+            <i class="fas fa-exclamation-triangle"></i>
+            <strong>Atención:</strong> El total de porcentajes es {{ datos_periodo.suma_porcentajes }}%.
+            Debe sumar 100% para poder calcular notas finales correctamente.
+        </div>
+        {% else %}
+        <div class="alerta-validacion excelente">
+            <i class="fas fa-check-circle"></i>
+            <strong>Perfecto:</strong> Los porcentajes suman 100%. El sistema calculará automáticamente las notas finales.
+        </div>
+        {% endif %}
+
+        <!-- Actividades -->
+        {% if datos_periodo.actividades %}
+            {% for actividad in datos_periodo.actividades %}
+            <div class="actividad-row">
+                <div class="actividad-info">
+                    <div class="actividad-icon">{{ actividad.get_tipo_display_icon }}</div>
+                    <div class="actividad-details">
+                        <h5>{{ actividad.nombre }}</h5>
+                        <p>{{ actividad.get_tipo_display }} {% if actividad.descripcion %} - {{ actividad.descripcion|truncatewords:15 }}{% endif %}</p>
+                    </div>
+                </div>
+
+                <div class="porcentaje-badge">
+                    {{ actividad.porcentaje }}%
+                </div>
+
+                <div class="calificados-info">
+                    <strong>{{ actividad.calificaciones|length }}</strong>
+                </div>
+
+                <div class="acciones-buttons">
+                    <a href="/academica/profesor/actividad/editar/{{ actividad.id }}/"
+                       class="btn-sm-custom btn-editar">
+                        <i class="fas fa-sliders-h"></i> Editar
+                    </a>
+                    <a href="/academica/profesor/actividad/calificar/{{ actividad.id }}/"
+                       class="btn-sm-custom btn-calificar">
+                        <i class="fas fa-edit"></i> Calificar
+                    </a>
+                    <a href="/academica/profesor/reporte/corte/{{ actividad.id }}/"
+                       class="btn-sm-custom btn-reporte">
+                        <i class="fas fa-chart-bar"></i> Reporte
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+        <div class="sin-actividades">
+            <i class="fas fa-inbox"></i>
+            <p>No hay actividades creadas para este período.</p>
+            <a href="/academica/profesor/actividad/crear/{{ materia.pk }}/" class="btn btn-primary btn-sm">
+                <i class="fas fa-plus"></i> Crear Primera Actividad
+            </a>
+        </div>
+        {% endif %}
+    </div>
+    {% endfor %}
+
+    <!-- Botones de navegación -->
+    <div class="mt-4">
+        <a href="/academica/profesor/materias/" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left"></i> Volver a Mis Materias
+        </a>
+    </div>
+
+    <!-- Información de ayuda -->
+    <div class="row mt-5 mb-4">
+        <div class="col-md-6">
+            <div class="card border-0 bg-light">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-book"></i> Tipos de Actividad</h5>
+                    <small>
+                         <strong>Quiz:</strong> Evaluación corta<br>
+                         <strong>Taller:</strong> Trabajo práctico<br>
+                         <strong>Parcial:</strong> Evaluación intermedia<br>
+                         <strong>Final:</strong> Examen final<br>
+                         <strong>Proyecto:</strong> Trabajo integrador<br>
+                         <strong>Participación:</strong> Clase y aportes<br>
+                    </small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card border-0 bg-light">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-lightbulb"></i> Recomendación</h5>
+                    <small>
+                        Para un corte académico típico, distribuye así:<br>
+                        <strong>- 30%</strong> Actividades continuas (quiz, talleres)<br>
+                        <strong>- 35%</strong> Examen parcial<br>
+                        <strong>- 35%</strong> Examen final<br><br>
+                        Esto garantiza que el total sea 100%.
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

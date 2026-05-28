@@ -1,4 +1,4 @@
-from django.db import migrations
+﻿from django.db import migrations
 
 
 def crear_usuario_admin(apps, schema_editor):
@@ -22,7 +22,7 @@ def crear_usuario_admin(apps, schema_editor):
     Usuario.objects.get_or_create(
         id_usuario=1001,
         defaults={
-            'nombre_usuario': 'Admin Academico',
+            'nombre_usuario': 'Daniela Pardo',
             'activo': True,
             'id_tipo_documento': tipo_documento,
             'id_rol': rol_admin,

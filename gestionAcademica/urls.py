@@ -1,6 +1,7 @@
 from django.urls import path
 
 from . import views
+from . import views_calificaciones
 
 
 urlpatterns = [
@@ -20,6 +21,8 @@ urlpatterns = [
     path('usuarios/', views.lista_usuarios, name='lista_usuarios'),
     path('lista-usuarios/', views.lista_usuarios, name='lista-usuarios'),
     path('profesores/', views.lista_profesores, name='lista_profesores'),
+    path('profesores/asignaciones/', views.asignaciones_docentes, name='asignaciones_docentes'),
+    path('profesores/asignaciones/<int:id>/', views.editar_asignacion_docente, name='editar_asignacion_docente'),
     path('usuarios/crear/', views.crear_usuario, name='crear_usuario'),
     path('usuarios/editar/<int:id>/', views.editar_usuario, name='editar_usuario'),
     path('usuarios/eliminar/<int:id>/', views.eliminar_usuario, name='eliminar_usuario'),
@@ -58,6 +61,15 @@ urlpatterns = [
     path('asistencias/crear/', views.crear_asistencia, name='crear_asistencia'),
     path('asistencias/editar/<int:id>/', views.editar_asistencia, name='editar_asistencia'),
     path('asistencias/eliminar/<int:id>/', views.eliminar_asistencia, name='eliminar_asistencia'),
+
+    # NUEVAS RUTAS PARA SISTEMA MEJORADO DE CALIFICACIONES
+    path('profesor/materias/', views_calificaciones.materias_profesor, name='profesor_materias'),
+    path('profesor/actividad/crear/<int:materia_id>/', views_calificaciones.crear_actividad, name='profesor_crear_actividad'),
+    path('profesor/actividad/editar/<int:actividad_id>/', views_calificaciones.editar_actividad, name='profesor_editar_actividad'),
+    path('profesor/actividad/calificar/<int:actividad_id>/', views_calificaciones.calificar_actividad, name='profesor_calificar_actividad'),
+    path('profesor/reporte/corte/<int:actividad_id>/', views_calificaciones.reporte_corte, name='profesor_reporte_corte'),
+    path('profesor/actividades/<int:materia_id>/', views_calificaciones.gestionar_actividades, name='profesor_gestionar_actividades'),
+    path('profesor/definitivas/<int:materia_id>/', views_calificaciones.definitivas_materia, name='profesor_definitivas_materia'),
 
     path('saludo-autor/<int:id_usuario>/', views.saludo_autor, name='saludo-autor'),
 ]

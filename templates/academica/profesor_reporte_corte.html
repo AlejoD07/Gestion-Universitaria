@@ -1,0 +1,323 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Reporte de Notas - {{ materia.nombre }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .reporte-header {
+        background: linear-gradient(135deg, #ff5a2c, #ff7a50);
+        color: white;
+        padding: 2rem;
+        border-radius: 12px;
+        margin-bottom: 2rem;
+    }
+
+    .reporte-header h1 {
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+
+    .stats-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .stat-card {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        text-align: center;
+        border-top: 4px solid #ff5a2c;
+    }
+
+    .stat-number {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #ff5a2c;
+        margin: 0.5rem 0;
+    }
+
+    .stat-label {
+        font-size: 0.85rem;
+        color: #6b7280;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .estudiante-card {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        border-left: 5px solid #e5e7eb;
+        transition: all 0.3s ease;
+    }
+
+    .estudiante-card.completo {
+        border-left-color: #ff5a2c;
+    }
+
+    .estudiante-card:hover {
+        box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        transform: translateY(-2px);
+    }
+
+    .estudiante-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 1rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .estudiante-nombre {
+        flex: 1;
+    }
+
+    .estudiante-nombre h4 {
+        color: #1f2937;
+        font-weight: 700;
+        margin-bottom: 0.25rem;
+    }
+
+    .codigo-badge {
+        background: #f3f4f6;
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        color: #6b7280;
+        font-weight: 600;
+    }
+
+    .nota-final {
+        text-align: center;
+        padding: 1rem;
+        background: #f9fafb;
+        border-radius: 8px;
+        min-width: 120px;
+    }
+
+    .nota-numero {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #ff5a2c;
+    }
+
+    .nota-label {
+        font-size: 0.75rem;
+        color: #6b7280;
+        text-transform: uppercase;
+    }
+
+    .estado-incompleto {
+        background: #fee2e2;
+        color: #991b1b;
+        padding: 0.5rem 0.75rem;
+        border-radius: 6px;
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+
+    .actividades-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 0.75rem;
+        margin-top: 1rem;
+    }
+
+    .actividad-item {
+        background: #f9fafb;
+        padding: 0.75rem;
+        border-radius: 8px;
+        font-size: 0.85rem;
+    }
+
+    .actividad-nombre {
+        font-weight: 600;
+        color: #1f2937;
+        margin-bottom: 0.25rem;
+    }
+
+    .actividad-nota {
+        color: #ff5a2c;
+        font-weight: 700;
+        font-size: 1.1rem;
+    }
+
+    .actividad-porcentaje {
+        color: #6b7280;
+        font-size: 0.75rem;
+    }
+
+    .actividad-aporte {
+        color: #16a34a;
+        font-size: 0.8rem;
+        margin-top: 0.25rem;
+    }
+
+    .sin-calificar {
+        color: #991b1b;
+        font-style: italic;
+    }
+
+    .estado-excelente {
+        color: #16a34a;
+    }
+
+    .estado-bueno {
+        color: #f59e0b;
+    }
+
+    .estado-deficiente {
+        color: #dc2626;
+    }
+
+    .btn-group-acciones {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2rem;
+    }
+
+    @media print {
+        .no-print {
+            display: none;
+        }
+
+        .estudiante-card {
+            break-inside: avoid;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block contenido %}
+<div class="container">
+    <!-- Header -->
+    <div class="reporte-header">
+        <h1><i class="fas fa-chart-bar"></i> Reporte de Calificaciones</h1>
+        <p><strong>Materia:</strong> {{ materia.nombre }} | <strong>Período:</strong> {{ actividad.periodo }} | <strong>Corte:</strong> {{ actividad.numero_corte }}</p>
+    </div>
+
+    <!-- Estadísticas generales -->
+    <div class="stats-container">
+        <div class="stat-card">
+            <div class="stat-label">Total Estudiantes</div>
+            <div class="stat-number">{{ estadisticas.total_estudiantes }}</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Calificaciones Completas</div>
+            <div class="stat-number">{{ estadisticas.estudiantes_completos }}</div>
+        </div>
+        {% if estadisticas.promedio_clase %}
+        <div class="stat-card">
+            <div class="stat-label">Promedio de Clase</div>
+            <div class="stat-number">{{ estadisticas.promedio_clase|floatformat:2 }}</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Nota Máxima</div>
+            <div class="stat-number">{{ estadisticas.nota_maxima|floatformat:2 }}</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Nota Mínima</div>
+            <div class="stat-number">{{ estadisticas.nota_minima|floatformat:2 }}</div>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Tabla de estudiantes -->
+    <h2 class="mb-4"><i class="fas fa-graduation-cap"></i> Desempeño por Estudiante</h2>
+
+    {% for item in reporte %}
+    <div class="estudiante-card {% if item.completo %}completo{% endif %}">
+        <!-- Header -->
+        <div class="estudiante-header">
+            <div class="estudiante-nombre">
+                <h4>{{ item.estudiante }}</h4>
+                <span class="codigo-badge">{{ item.codigo }}</span>
+            </div>
+
+            {% if item.completo %}
+                <div class="nota-final">
+                    <div class="nota-numero">{{ item.nota_final|floatformat:2 }}</div>
+                    <div class="nota-label">Nota Final</div>
+                </div>
+            {% else %}
+                <div class="estado-incompleto">
+                    <i class="fas fa-exclamation-circle"></i> Incompleto
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Estado general -->
+        {% if item.completo %}
+        <div class="mb-3">
+            <strong>Estado:</strong> <span class="{% if item.estado %}estado-{{ item.estado|lower|cut:' ' }}{% endif %}">{{ item.estado }}</span>
+        </div>
+        {% else %}
+        <div class="alert alert-warning small mb-3">
+            <i class="fas fa-info-circle"></i>
+            Este estudiante aún tiene actividades sin calificar. La nota final se calculará cuando todas las actividades tengan calificación.
+        </div>
+        {% endif %}
+
+        <!-- Detalles de actividades -->
+        <div>
+            <strong class="d-block mb-2">Desglose por Actividad:</strong>
+            <div class="actividades-grid">
+                {% for actividad in item.detalles.actividades %}
+                <div class="actividad-item">
+                    <div class="actividad-nombre">
+                        {{ actividad.tipo }} {{ actividad.nombre }}
+                    </div>
+                    <div class="actividad-nota">
+                        {% if actividad.calificacion != None %}
+                            {{ actividad.calificacion|floatformat:1 }}/5.0
+                        {% else %}
+                            <span class="sin-calificar">S/C</span>
+                        {% endif %}
+                    </div>
+                    <div class="actividad-porcentaje">
+                        Peso: {{ actividad.porcentaje }}%
+                    </div>
+                    {% if actividad.aporte != None %}
+                    <div class="actividad-aporte">
+                        Aporte: +{{ actividad.aporte|floatformat:2 }}
+                    </div>
+                    {% endif %}
+                    {% if actividad.observaciones %}
+                    <div class="small mt-2 text-muted">
+                        <strong>:</strong> {{ actividad.observaciones|truncatewords:10 }}
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+    <!-- Botones de acción -->
+    <div class="btn-group-acciones no-print">
+        <a href="/academica/profesor/materias/" class="btn btn-primary">
+            <i class="fas fa-arrow-left"></i> Volver a Materias
+        </a>
+        <button class="btn btn-secondary" onclick="window.print()">
+            <i class="fas fa-print"></i> Imprimir Reporte
+        </button>
+        <a href="/academica/profesor/actividades/{{ materia.pk }}/" class="btn btn-outline-secondary">
+            <i class="fas fa-list"></i> Ver Actividades
+        </a>
+    </div>
+
+    <!-- Footer -->
+    <div class="mt-5 text-center text-muted small">
+        <p>Reporte generado el {{ now|date:"d/m/Y" }} a las {{ now|time:"H:i:s" }}</p>
+    </div>
+</div>
+{% endblock %}

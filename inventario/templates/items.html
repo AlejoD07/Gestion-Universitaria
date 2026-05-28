@@ -1,9 +1,9 @@
-﻿{% extends "home.html" %}
+{% extends "home.html" %}
 
 {% block main %}
 
 <div class="actions">
-    <a href="{% url 'inventario:crear_item' %}" class="btn">
+    <a href="{% url 'inventario:crear_item' %}" class="btn btn-auto">
         + Crear nuevo Item
     </a>
 </div>
@@ -38,7 +38,7 @@
                             <td>{{ item.descripcion_item }}</td>
                             <td>{{ item.ubicacion_item }}</td>
                             <td>{{ item.fecha_registro|date:"d/m/Y" }}</td>
-                            <td>{{ item.fecha_compra }}</td>
+                            <td>{{ item.fecha_compra|date:"d/m/Y" }}</td>
                             <td>${{ item.valor_item }}</td>
                             <td>{{ item.get_estado_item_display }}</td>
                             <td>{{ item.categoria.nombre_categoria }}</td>
@@ -65,5 +65,3 @@
 </div>
 
 {% endblock %}
-
-

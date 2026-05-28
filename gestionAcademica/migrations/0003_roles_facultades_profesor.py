@@ -28,13 +28,13 @@ def crear_roles_y_facultades(apps, schema_editor):
     facultad, _ = Facultad.objects.get_or_create(nombre='Facultad General')
 
     usuarios_base = [
-        (9000, 'Super Administrador', 99),
-        (9100, 'Usuario Contabilidad', 4),
-        (9200, 'Usuario Recursos Humanos', 5),
-        (9300, 'Usuario inventario', 6),
-        (9400, 'Usuario Solicitudes', 7),
-        (9500, 'Profesor Demo', 2),
-        (9600, 'Estudiante Demo', 3),
+        (9000, 'Camilo Restrepo', 99),
+        (9100, 'Carolina Vargas', 4),
+        (9200, 'Natalia Herrera', 5),
+        (9300, 'Miguel Torres', 6),
+        (9400, 'Sofia Martinez', 7),
+        (9500, 'Mariana Gomez', 2),
+        (9600, 'Andres Felipe Rios', 3),
     ]
     for documento, nombre, rol_id in usuarios_base:
         usuario, creado = Usuario.objects.get_or_create(

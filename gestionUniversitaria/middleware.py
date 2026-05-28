@@ -1,4 +1,4 @@
-﻿from django.shortcuts import redirect
+from django.shortcuts import redirect
 from django.urls import reverse
 
 from .access import normalizar_rol, puede_ver_modulo
@@ -45,6 +45,17 @@ class RoleAccessMiddleware:
     def _academica_restringida(self, request, path):
         rol = normalizar_rol(request.session.get('usuario_rol'))
         if 'admin' in rol or 'super' in rol:
+            return False
+        if 'prof' in rol and path.startswith('/academica/profesor/'):
+            return False
+        if 'prof' in rol and (
+            path == '/academica/materias/crear/'
+            or path.startswith('/academica/materias/editar/')
+            or path == '/academica/notas/crear/'
+            or path.startswith('/academica/notas/editar/')
+            or path == '/academica/asistencias/crear/'
+            or path.startswith('/academica/asistencias/editar/')
+        ):
             return False
         if not ('prof' in rol or 'estudiante' in rol):
             return False

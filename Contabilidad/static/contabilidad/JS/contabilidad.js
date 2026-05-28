@@ -1,5 +1,5 @@
-function confirmarEliminar(event, mensaje) {
-    const confirmado = confirm(mensaje || '¿Esta seguro de que desea eliminar este registro?');
+﻿function confirmarEliminar(event, mensaje) {
+    const confirmado = confirm(mensaje || '¿Está seguro de que desea eliminar este registro?');
     if (!confirmado) {
         event.preventDefault();
     }
@@ -32,6 +32,63 @@ function calcularSaldo() {
     }
 }
 
+function limpiarDatosEmpleado() {
+    ['empleado_nombre', 'cargo', 'area'].forEach(function (id) {
+        const campo = document.getElementById(id);
+        if (campo) {
+            campo.value = '';
+        }
+    });
+}
+
+function escribirMensajeEmpleado(texto, esError) {
+    const mensaje = document.getElementById('empleado_mensaje');
+    if (!mensaje) {
+        return;
+    }
+    mensaje.textContent = texto;
+    mensaje.style.color = esError ? '#c0392b' : '#138a4b';
+}
+
+function cargarEmpleadoPorCedula() {
+    const formulario = document.getElementById('nomina-form');
+    const cedula = document.getElementById('empleado_cedula')?.value.trim();
+    if (!formulario || !cedula) {
+        limpiarDatosEmpleado();
+        escribirMensajeEmpleado('Busca la cédula registrada en Recursos Humanos.', false);
+        return;
+    }
+
+    const url = formulario.dataset.buscarEmpleadoUrl + '?cedula=' + encodeURIComponent(cedula);
+    escribirMensajeEmpleado('Buscando empleado...', false);
+
+    fetch(url)
+        .then(function (respuesta) {
+            if (!respuesta.ok) {
+                throw new Error('Empleado no encontrado');
+            }
+            return respuesta.json();
+        })
+        .then(function (data) {
+            const empleado = data.empleado;
+            document.getElementById('empleado_nombre').value = empleado.nombre || '';
+            document.getElementById('cargo').value = empleado.cargo || '';
+            document.getElementById('area').value = empleado.area || '';
+
+            const salario = document.getElementById('salario_base');
+            if (salario && empleado.salario !== '') {
+                salario.value = empleado.salario;
+            }
+
+            escribirMensajeEmpleado('Empleado cargado desde Recursos Humanos.', false);
+            calcularTotalNomina();
+        })
+        .catch(function () {
+            limpiarDatosEmpleado();
+            escribirMensajeEmpleado('No se encontró un empleado activo con esa cédula.', true);
+        });
+}
+
 document.addEventListener('DOMContentLoaded', function () {
 
     const camposNomina = ['salario_base', 'horas_extras', 'comisiones', 'deducciones'];
@@ -41,6 +98,16 @@ document.addEventListener('DOMContentLoaded', function () {
             campo.addEventListener('input', calcularTotalNomina);
         }
     });
+
+    const botonBuscarEmpleado = document.getElementById('buscar_empleado');
+    if (botonBuscarEmpleado) {
+        botonBuscarEmpleado.addEventListener('click', cargarEmpleadoPorCedula);
+    }
+
+    const campoCedula = document.getElementById('empleado_cedula');
+    if (campoCedula) {
+        campoCedula.addEventListener('change', cargarEmpleadoPorCedula);
+    }
 
     const camposPresupuesto = ['monto_asignado', 'monto_gastado'];
     camposPresupuesto.forEach(function (id) {

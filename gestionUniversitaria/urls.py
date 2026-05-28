@@ -11,6 +11,7 @@ urlpatterns = [
     path('login/', views.login_view, name='login'),
     path('salir/', views.logout_view, name='logout'),
     path('sin-permiso/', views.sin_permiso, name='sin_permiso'),
+    path('admin-roles/', views.administrar_permisos_roles, name='administrar_permisos_roles'),
     path('rrhh/', include('RecursosHumanos.urls')),
     path('academica/', include('gestionAcademica.urls')),
     path('contabilidad/', include('Contabilidad.urls')),

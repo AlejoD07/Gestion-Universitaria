@@ -1,0 +1,139 @@
+{% extends 'contabilidad/primary-layout.html' %}
+{% block titulo %}{{ plan.nombre }}{% endblock %}
+{% block contenido %}
+
+<style>
+    .presupuesto-header {
+        background: white;
+        border-left: 4px solid #ff5a2c;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,.08);
+        margin-bottom: 20px;
+        padding: 20px;
+    }
+
+    .metricas {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+        gap: 12px;
+        margin: 16px 0;
+    }
+
+    .metrica {
+        background: #f8fafc;
+        border-radius: 8px;
+        padding: 13px;
+    }
+
+    .metrica span {
+        color: #667085;
+        display: block;
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+    }
+
+    .metrica strong {
+        color: #ff5a2c;
+        display: block;
+        font-size: 20px;
+        margin-top: 4px;
+    }
+
+    .progress {
+        background: #e5e7eb;
+        border-radius: 999px;
+        height: 8px;
+        overflow: hidden;
+        min-width: 110px;
+    }
+
+    .progress span {
+        background: #ff5a2c;
+        display: block;
+        height: 100%;
+    }
+
+    .revisiones {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 12px;
+        margin: 18px 0;
+    }
+
+    .revision-card {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,.08);
+        padding: 14px;
+    }
+</style>
+
+<h1>{{ plan.nombre }}</h1>
+
+<div class="presupuesto-header">
+    <p><strong>Ano:</strong> {{ plan.anio }} · <strong>Estado:</strong> {{ plan.get_estado_display }}{% if plan.fecha_aprobacion %} · <strong>Aprobado:</strong> {{ plan.fecha_aprobacion }}{% endif %}</p>
+    <p>{{ plan.descripcion }}</p>
+    <div class="metricas">
+        <div class="metrica"><span>Inicial</span><strong>$ {{ estadisticas.total_inicial }}</strong></div>
+        <div class="metrica"><span>Ajustes</span><strong>$ {{ estadisticas.total_ajustes }}</strong></div>
+        <div class="metrica"><span>Vigente</span><strong>$ {{ estadisticas.total_vigente }}</strong></div>
+        <div class="metrica"><span>Ejecutado</span><strong>$ {{ estadisticas.total_ejecutado }}</strong></div>
+        <div class="metrica"><span>Disponible</span><strong>$ {{ estadisticas.total_disponible }}</strong></div>
+    </div>
+    <a href="{% url 'crear_partida_presupuestal' plan.id %}" class="btn btn-primario">Agregar partida</a>
+    <a href="{% url 'registrar_revision_presupuestal' plan.id %}" class="btn btn-secundario">Revision trimestral</a>
+    <a href="{% url 'lista_presupuestos' %}" class="btn btn-secundario">Volver</a>
+</div>
+
+<h2>Partidas presupuestales</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Area</th>
+            <th>Concepto</th>
+            <th>Inicial</th>
+            <th>Ajustes</th>
+            <th>Vigente</th>
+            <th>Ejecutado</th>
+            <th>Disponible</th>
+            <th>Ejecucion</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for partida in partidas %}
+        <tr>
+            <td>{{ partida.area }}</td>
+            <td>{{ partida.concepto }}</td>
+            <td>$ {{ partida.monto_inicial }}</td>
+            <td>$ {{ partida.total_ajustes }}</td>
+            <td>$ {{ partida.presupuesto_vigente }}</td>
+            <td>$ {{ partida.monto_ejecutado }}</td>
+            <td>$ {{ partida.disponible }}</td>
+            <td>
+                {{ partida.porcentaje_ejecucion }}%
+                <div class="progress"><span style="width: {{ partida.porcentaje_ejecucion }}%"></span></div>
+            </td>
+            <td><a href="{% url 'registrar_ajuste_presupuestal' partida.id %}" class="btn btn-secundario">Ajustar</a></td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="9" style="text-align:center; padding:20px;">No hay partidas registradas.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h2 style="margin-top:26px;">Revisiones trimestrales</h2>
+<div class="revisiones">
+    {% for revision in revisiones %}
+        <div class="revision-card">
+            <h2>Trimestre {{ revision.trimestre }}</h2>
+            <p><strong>{{ revision.get_decision_display }}</strong> · {{ revision.fecha_revision }}</p>
+            <p>{{ revision.observaciones }}</p>
+        </div>
+    {% empty %}
+        <p>No hay revisiones trimestrales registradas.</p>
+    {% endfor %}
+</div>
+
+{% endblock %}

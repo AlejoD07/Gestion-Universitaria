@@ -1,31 +1,39 @@
-{% extends 'contabilidad/primary-layout.html' %}
+﻿{% extends 'contabilidad/primary-layout.html' %}
 {% block titulo %}Editar Nómina{% endblock %}
 {% block contenido %}
 
-<h1>Editar Nomina</h1>
+<h1>Editar Nómina</h1>
 
 <div class="formulario">
-    <form method="POST">
+    {% if error_empleado %}
+        <div class="alerta-error">{{ error_empleado }}</div>
+    {% endif %}
+
+    <form method="POST" id="nomina-form" data-buscar-empleado-url="{% url 'buscar_empleado_nomina' %}">
         {% csrf_token %}
 
         <div class="campo">
-            <label>Nombre del empleado</label>
-            <input type="text" name="empleado_nombre" value="{{ nomina.empleado_nombre }}" required>
+            <label>Cédula del empleado</label>
+            <div class="grupo-busqueda">
+                <input type="text" id="empleado_cedula" name="empleado_cedula" value="{% if datos_formulario %}{{ datos_formulario.empleado_cedula }}{% else %}{{ nomina.empleado_cedula }}{% endif %}" required>
+                <button type="button" id="buscar_empleado" class="btn btn-secundario">Buscar</button>
+            </div>
+            <small id="empleado_mensaje" class="mensaje-ayuda">Busca la cédula registrada en Recursos Humanos.</small>
         </div>
 
         <div class="campo">
-            <label>Cedula</label>
-            <input type="text" name="empleado_cedula" value="{{ nomina.empleado_cedula }}" required>
+            <label>Nombre del empleado</label>
+            <input type="text" id="empleado_nombre" name="empleado_nombre" value="{% if datos_formulario %}{{ datos_formulario.empleado_nombre }}{% else %}{{ nomina.empleado_nombre }}{% endif %}" readonly required>
         </div>
 
         <div class="campo">
             <label>Cargo</label>
-            <input type="text" name="cargo" value="{{ nomina.cargo }}" required>
+            <input type="text" id="cargo" name="cargo" value="{% if datos_formulario %}{{ datos_formulario.cargo }}{% else %}{{ nomina.cargo }}{% endif %}" readonly required>
         </div>
 
         <div class="campo">
-            <label>Area</label>
-            <input type="text" name="area" value="{{ nomina.area }}" required>
+            <label>Área</label>
+            <input type="text" id="area" name="area" value="{% if datos_formulario %}{{ datos_formulario.area }}{% else %}{{ nomina.area }}{% endif %}" readonly required>
         </div>
 
         <div class="campo">
@@ -48,27 +56,27 @@
 
         <div class="campo">
             <label>Año</label>
-            <input type="number" name="anio" value="{{ nomina.anio }}" required>
+            <input type="number" name="anio" value="{% if datos_formulario %}{{ datos_formulario.anio }}{% else %}{{ nomina.anio }}{% endif %}" required>
         </div>
 
         <div class="campo">
             <label>Salario base</label>
-            <input type="number" id="salario_base" name="salario_base" value="{{ nomina.salario_base }}" step="0.01" required>
+            <input type="number" id="salario_base" name="salario_base" value="{% if datos_formulario %}{{ datos_formulario.salario_base }}{% else %}{{ nomina.salario_base }}{% endif %}" step="0.01" required>
         </div>
 
         <div class="campo">
             <label>Horas extras</label>
-            <input type="number" id="horas_extras" name="horas_extras" value="{{ nomina.horas_extras }}" step="0.01">
+            <input type="number" id="horas_extras" name="horas_extras" value="{% if datos_formulario %}{{ datos_formulario.horas_extras }}{% else %}{{ nomina.horas_extras }}{% endif %}" step="0.01">
         </div>
 
         <div class="campo">
             <label>Comisiones</label>
-            <input type="number" id="comisiones" name="comisiones" value="{{ nomina.comisiones }}" step="0.01">
+            <input type="number" id="comisiones" name="comisiones" value="{% if datos_formulario %}{{ datos_formulario.comisiones }}{% else %}{{ nomina.comisiones }}{% endif %}" step="0.01">
         </div>
 
         <div class="campo">
             <label>Deducciones</label>
-            <input type="number" id="deducciones" name="deducciones" value="{{ nomina.deducciones }}" step="0.01">
+            <input type="number" id="deducciones" name="deducciones" value="{% if datos_formulario %}{{ datos_formulario.deducciones }}{% else %}{{ nomina.deducciones }}{% endif %}" step="0.01">
         </div>
 
         <div class="campo">
@@ -78,7 +86,7 @@
 
         <div class="campo">
             <label>Fecha de pago</label>
-            <input type="date" name="fecha_pago" value="{{ nomina.fecha_pago|date:'Y-m-d' }}" required>
+            <input type="date" name="fecha_pago" value="{% if datos_formulario %}{{ datos_formulario.fecha_pago }}{% else %}{{ nomina.fecha_pago|date:'Y-m-d' }}{% endif %}" required>
         </div>
 
         <div class="campo">

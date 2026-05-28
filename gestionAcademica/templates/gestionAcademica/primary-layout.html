@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión Académica - {% block titulo %}{% endblock %}</title>
-    <link rel="stylesheet" href="{% static 'gestionAcademica/CSS/styleAcademica.css' %}">
+    <link rel="stylesheet" href="{% static 'gestionAcademica/CSS/styleAcademica.css' %}?v=20260528-1">
 </head>
 <body>
     <header>
@@ -33,11 +33,15 @@
         {% if request.session.usuario_rol == 'Profesor' or request.session.usuario_rol == 'Estudiante' %}
             <a href="{% url 'lista_materias' %}">Mis materias</a>
             <a href="{% url 'lista_inscripciones' %}">Inscripciones</a>
+            {% if request.session.usuario_rol == 'Profesor' %}
+                <a href="{% url 'profesor_materias' %}">Calificaciones</a>
+            {% endif %}
             <a href="{% url 'lista_notas' %}">Notas</a>
             <a href="{% url 'lista_asistencias' %}">Asistencias</a>
         {% else %}
             <a href="{% url 'lista_usuarios' %}">Usuarios</a>
             <a href="{% url 'lista_profesores' %}">Profesores</a>
+            <a href="{% url 'asignaciones_docentes' %}">Asignaciones docentes</a>
             <a href="{% url 'lista_estudiantes' %}">Estudiantes</a>
             <a href="{% url 'lista_programas' %}">Programas</a>
             <a href="{% url 'lista_materias' %}">Materias</a>
@@ -61,8 +65,3 @@
     <script src="{% static 'gestionAcademica/JS/academica.js' %}"></script>
 </body>
 </html>
-
-
-
-
-

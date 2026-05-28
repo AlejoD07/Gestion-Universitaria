@@ -130,12 +130,19 @@ nav ul li a:hover {
 .btn {
     flex: 1;
     text-align: center;
-    padding: 15px;
+    padding: 15px 20px;
     background: #ff5a2c;
     color: white;
     border-radius: 8px;
     text-decoration: none;
     font-weight: bold;
+}
+
+.btn-auto {
+    display: inline-block;
+    flex: initial;
+    width: auto;
+    padding: 15px 20px;
 }
 
 /* CONTENEDOR DE TABLA */
@@ -172,7 +179,7 @@ nav ul li a:hover {
     background-color: #f9f9f9;
 }
 
-/* SOLO DESCRIPCIÓN (NO TODAS LAS COLUMNAS) */
+/* SOLO DESCRIPCIÃ“N (NO TODAS LAS COLUMNAS) */
 .custom-table td:nth-child(3) {
     max-width: 120px;
     white-space: nowrap;
@@ -196,7 +203,7 @@ nav ul li a:hover {
     flex-wrap: nowrap;
 }
 
-/* BOTONES PEQUEÑOS */
+/* BOTONES PEQUEÃ‘OS */
 .btn.small {
     padding: 4px 6px;
     font-size: 10px;
@@ -217,9 +224,9 @@ nav ul li a:hover {
     overflow-x: auto;
 }
 
-/* TABLA MÁS ESTABLE */
+/* TABLA MÃS ESTABLE */
 .custom-table {
-    width: 1200px; /* 🔥 clave: fuerza ancho real */
+    width: 1200px; /* ðŸ”¥ clave: fuerza ancho real */
     border-collapse: collapse;
     font-size: 13px;
 }
@@ -232,13 +239,13 @@ nav ul li a:hover {
     white-space: nowrap;
 }
 
-/* BOTONES MÁS PEQUEÑOS */
+/* BOTONES MÃS PEQUEÃ‘OS */
 .btn.small {
     padding: 3px 6px;
     font-size: 10px;
 }
 
-/* FECHAS MÁS CORTAS VISUALMENTE */
+/* FECHAS MÃS CORTAS VISUALMENTE */
 .custom-table td {
     white-space: nowrap;
 }

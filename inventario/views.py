@@ -1,4 +1,4 @@
-﻿from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from . import models
 from . import forms
@@ -44,8 +44,7 @@ def guardar_categoria(request):
         nombre = request.POST["nombre_categoria"]
         descripcion = request.POST["descripcion_categoria"]
 
-
-        nueva_categoria = models.Categoria.objects.create(
+        models.Categoria.objects.create(
             nombre_categoria = nombre,
             descripcion_categoria = descripcion
         )
@@ -118,18 +117,17 @@ def guardar_item(request):
         ubicacion = request.POST["ubicacion_item"]
         fecha_compra = request.POST["fecha_compra"]
         valor = request.POST["valor_item"]
-        estado = request.POST["estado_item"]
         categoria = request.POST["categoria"]
         categoria_item = models.Categoria.objects.get(id=categoria)
 
-        nuevo_item = models.Item.objects.create(
+        models.Item.objects.create(
             nombre_item = nombre,
             marca_item = marca,
             descripcion_item = descripcion,
             ubicacion_item = ubicacion,
             fecha_compra = fecha_compra,
             valor_item = valor,
-            estado_item = estado,
+            estado_item = "1",
             categoria = categoria_item,
         )
 
@@ -149,7 +147,6 @@ def actualizar_item(request, id):
         estado = request.POST["estado_item"]
         categoria = request.POST["categoria"]
         categoria_item = models.Categoria.objects.get(id=categoria)
-
 
         item.nombre_item = nombre
         item.descripcion_item = descripcion
@@ -184,7 +181,6 @@ def eliminar_item(request, id):
         messages.success(request, "Item eliminado correctamente")
     except ProtectedError:
         messages.error(request, "No puedes eliminar este item porque tiene prestamos asociados")
-    
 
     return redirect('inventario:items')
 
@@ -202,7 +198,7 @@ def prestamos(request):
 
 
 def crear_prestamo(request):
-    items = models.Item.objects.all()
+    items = models.Item.objects.filter(estado_item="1")
 
     return render(request, 'formulario_prestamo.html', {'formulario': forms.FormularioPrestamo, 'items': items})
 
@@ -210,17 +206,19 @@ def crear_prestamo(request):
 def guardar_prestamo(request):
     if request.method == "POST":
         devolucion_esperada = request.POST["fecha_devolucion_esperada"]
-        estado = request.POST["estado_prestamo"]
         observaciones = request.POST["observaciones_entrega"]
         item = request.POST["item"]
-        item_prestamo = models.Item.objects.get(id=item)
+        item_prestamo = get_object_or_404(models.Item, id=item, estado_item="1")
 
-        nuevo_prestamo = models.Prestamo.objects.create(
+        models.Prestamo.objects.create(
             fecha_devolucion_esperada = devolucion_esperada,
-            estado_prestamo = estado,
+            estado_prestamo = "1",
             observaciones_entrega = observaciones,
             item = item_prestamo,
         )
+
+        item_prestamo.estado_item = "2"
+        item_prestamo.save()
 
         return redirect('inventario:prestamos')
 
@@ -231,7 +229,6 @@ def actualizar_prestamo(request, id):
     prestamo = models.Prestamo.objects.get(id = id)
 
     if request.method == "POST":
-        devolucion_esperada = request.POST["fecha_devolucion_esperada"]
         devolucion = request.POST["fecha_devolucion"]
 
         if devolucion == "":
@@ -240,10 +237,16 @@ def actualizar_prestamo(request, id):
         estado = request.POST["estado_prestamo"]
         observaciones = request.POST["observaciones_devolucion"]
 
-        prestamo.fecha_devolucion_esperada = devolucion_esperada
         prestamo.fecha_devolucion = devolucion
         prestamo.estado_prestamo = estado
         prestamo.observaciones_devolucion = observaciones
+
+        if estado == "2":
+            prestamo.item.estado_item = "1"
+            prestamo.item.save()
+        elif estado in ["1", "3"]:
+            prestamo.item.estado_item = "2"
+            prestamo.item.save()
 
         prestamo.save()
 
@@ -259,14 +262,19 @@ def actualizar_prestamo(request, id):
     return render(request, 'formulario_prestamo.html', {
         'formulario': formulario,
         'prestamo': prestamo,
-        'items': items
+        'items': models.Item.objects.filter(estado_item="1")
     })
 
 
 def eliminar_prestamo(request, id):
     prestamo = models.Prestamo.objects.get(id = id)
+    item = prestamo.item
 
     prestamo.delete()
+
+    if not models.Prestamo.objects.filter(item=item, estado_prestamo__in=["1", "3"]).exists():
+        item.estado_item = "1"
+        item.save()
 
     return redirect('inventario:prestamos')
 
@@ -279,6 +287,3 @@ def lista_inventario(request):
     }
 
     return render(request, 'lista_inventario.html', data_envio)
-
-
-

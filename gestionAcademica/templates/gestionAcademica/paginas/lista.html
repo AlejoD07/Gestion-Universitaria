@@ -2,9 +2,144 @@
 {% block titulo %}{{ titulo }}{% endblock %}
 {% block contenido %}
 
+<style>
+.filtros-lista {
+    background: #fff;
+    border: 1px solid #e6e8ee;
+    border-left: 4px solid #ff5a2c;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(16,24,40,0.07);
+    display: grid;
+    grid-template-columns: 1.05fr repeat(4, minmax(145px, 1fr)) auto;
+    gap: 16px;
+    align-items: end;
+    padding: 18px;
+    margin: 4px 0 22px;
+}
+
+.filtros-header {
+    border-right: 1px solid #eaecf0;
+    padding-right: 16px;
+}
+
+.filtros-header strong {
+    color: #1f2937;
+    display: block;
+    font-size: 17px;
+    line-height: 1.2;
+    margin-bottom: 4px;
+}
+
+.filtros-header span {
+    color: #667085;
+    display: block;
+    font-size: 12px;
+    line-height: 1.35;
+}
+
+.filtro-campo label {
+    display: block;
+    color: #667085;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    margin-bottom: 7px;
+    text-transform: uppercase;
+}
+
+.filtro-campo select {
+    appearance: none;
+    background-color: #fbfcfe;
+    background-image: linear-gradient(45deg, transparent 50%, #667085 50%), linear-gradient(135deg, #667085 50%, transparent 50%);
+    background-position: calc(100% - 18px) 52%, calc(100% - 12px) 52%;
+    background-repeat: no-repeat;
+    background-size: 6px 6px, 6px 6px;
+    border: 1px solid #d0d5dd;
+    border-radius: 9px;
+    color: #1f2937;
+    font-size: 14px;
+    min-height: 42px;
+    padding: 10px 34px 10px 12px;
+    width: 100%;
+}
+
+.filtro-campo select:focus {
+    background-color: white;
+    border-color: #ff5a2c;
+    box-shadow: 0 0 0 3px rgba(255,90,44,0.14);
+    outline: none;
+}
+
+.filtro-acciones {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.filtro-acciones .btn {
+    align-items: center;
+    display: inline-flex;
+    justify-content: center;
+    min-height: 42px;
+    min-width: 92px;
+    margin: 0;
+    padding: 10px 14px;
+}
+
+@media (max-width: 900px) {
+    .filtros-lista {
+        grid-template-columns: repeat(2, minmax(180px, 1fr));
+    }
+
+    .filtros-header {
+        border-right: 0;
+        border-bottom: 1px solid #eaecf0;
+        grid-column: 1 / -1;
+        padding: 0 0 12px;
+    }
+
+    .filtro-acciones {
+        justify-content: flex-start;
+    }
+}
+
+@media (max-width: 560px) {
+    .filtros-lista {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+
 <h1>{{ titulo }}</h1>
 
-{% if crear_url %}<a href="{% url crear_url %}" class="btn btn-primario" style="margin-bottom: 20px; display: inline-block;">+ Nuevo Registro</a>{% endif %}
+{% if crear_url %}
+    <a href="{% url crear_url %}" class="btn btn-primario" style="margin-bottom: 20px; display: inline-block;">{{ crear_texto|default:"+ Nuevo Registro" }}</a>
+{% endif %}
+
+{% if filtros %}
+    <form method="get" class="filtros-lista">
+        <div class="filtros-header">
+            <strong>Filtros</strong>
+            <span>Refina la consulta de registros</span>
+        </div>
+        {% for filtro in filtros %}
+            <div class="filtro-campo">
+                <label for="filtro_{{ filtro.name }}">{{ filtro.label }}</label>
+                <select id="filtro_{{ filtro.name }}" name="{{ filtro.name }}">
+                    <option value="">{{ filtro.placeholder|default:"Todos" }}</option>
+                    {% for option in filtro.options %}
+                        <option value="{{ option.valor }}" {% if option.seleccionado %}selected{% endif %}>{{ option.texto }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        {% endfor %}
+        <div class="filtro-acciones">
+            <button type="submit" class="btn btn-primario">Filtrar</button>
+            <a href="{{ request.path }}" class="btn btn-secundario">Limpiar</a>
+        </div>
+    </form>
+{% endif %}
 
 <table>
     <thead>
@@ -26,7 +161,9 @@
                     {% with registro_id=fila|last %}
                         {% if puede_editar|default:True %}
                             <a href="{% url editar_url registro_id %}" class="btn btn-secundario">Editar</a>
-                            <a href="{% url eliminar_url registro_id %}" class="btn btn-peligro btn-eliminar">Eliminar</a>
+                            {% if not ocultar_eliminar %}
+                                <a href="{% url eliminar_url registro_id %}" class="btn btn-peligro btn-eliminar">Eliminar</a>
+                            {% endif %}
                         {% else %}
                             <span style="color:#667085;">Solo lectura</span>
                         {% endif %}
@@ -42,6 +179,3 @@
 </table>
 
 {% endblock %}
-
-
-

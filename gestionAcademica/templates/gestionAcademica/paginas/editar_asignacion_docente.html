@@ -1,0 +1,142 @@
+{% extends 'gestionAcademica/primary-layout.html' %}
+{% block titulo %}{{ titulo }}{% endblock %}
+{% block contenido %}
+
+<style>
+    .asignacion-layout {
+        display: grid;
+        grid-template-columns: minmax(240px, 0.8fr) minmax(320px, 1.6fr);
+        gap: 20px;
+        align-items: start;
+    }
+
+    .panel {
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+        padding: 20px;
+    }
+
+    .panel h2 {
+        margin-bottom: 12px;
+    }
+
+    .campo-asignacion {
+        margin-bottom: 16px;
+    }
+
+    .campo-asignacion label {
+        color: #667085;
+        display: block;
+        font-size: 13px;
+        font-weight: 700;
+        margin-bottom: 6px;
+        text-transform: uppercase;
+    }
+
+    .campo-asignacion select {
+        width: 100%;
+        border: 1px solid #d0d5dd;
+        border-radius: 8px;
+        min-height: 42px;
+        padding: 9px 12px;
+    }
+
+    .materias-asignacion {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 12px;
+    }
+
+    .materia-option {
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+        display: flex;
+        gap: 10px;
+        align-items: flex-start;
+        padding: 12px;
+        background: #fbfcfe;
+    }
+
+    .materia-option input {
+        margin-top: 4px;
+    }
+
+    .materia-option strong {
+        display: block;
+        color: #1f2937;
+    }
+
+    .materia-option span {
+        color: #667085;
+        display: block;
+        font-size: 12px;
+        margin-top: 2px;
+    }
+
+    .materia-option.actual {
+        border-color: #ff5a2c;
+        background: #fff7f3;
+    }
+
+    .acciones-asignacion {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+        flex-wrap: wrap;
+    }
+
+    @media (max-width: 760px) {
+        .asignacion-layout {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<h1>{{ titulo }}</h1>
+
+<form method="post">
+    {% csrf_token %}
+    <div class="asignacion-layout">
+        <aside class="panel">
+            <h2>{{ profesor.nombre_usuario }}</h2>
+            <p>Documento: <strong>{{ profesor.id_usuario }}</strong></p>
+            <p>Rol: <strong>{{ profesor.id_rol }}</strong></p>
+            <div class="campo-asignacion">
+                <label for="facultad">Facultad</label>
+                <select id="facultad" name="facultad">
+                    <option value="">Sin asignar</option>
+                    {% for facultad in facultades %}
+                        <option value="{{ facultad.pk }}" {% if profesor.facultad_id == facultad.pk %}selected{% endif %}>{{ facultad.nombre }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <p class="docente-meta">La facultad ubica administrativamente al profesor. Las materias definen su carga docente.</p>
+        </aside>
+
+        <section class="panel">
+            <h2>Materias a dictar</h2>
+            <div class="materias-asignacion">
+                {% for materia in materias %}
+                    <label class="materia-option {% if materia.pk in materias_actuales %}actual{% endif %}">
+                        <input type="checkbox" name="materias" value="{{ materia.pk }}" {% if materia.pk in materias_actuales %}checked{% endif %}>
+                        <span>
+                            <strong>{{ materia.nombre }}</strong>
+                            <span>{{ materia.programa.nombre }} · {{ materia.creditos }} creditos</span>
+                            <span>Profesor actual: {{ materia.profesor|default:"Sin asignar" }}</span>
+                        </span>
+                    </label>
+                {% empty %}
+                    <p>No hay materias activas registradas.</p>
+                {% endfor %}
+            </div>
+
+            <div class="acciones-asignacion">
+                <button type="submit" class="btn btn-primario">Guardar asignacion</button>
+                <a href="{% url 'asignaciones_docentes' %}" class="btn btn-secundario">Cancelar</a>
+            </div>
+        </section>
+    </div>
+</form>
+
+{% endblock %}
